@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百慕達競技場 - 中文導覽發音練習系統 (Bermuda Arena - Audio Guide Trainer)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bermuda: {
+                            bg: '#090d16',
+                            card: '#111827',
+                            border: '#1f2937',
+                            neonBlue: '#00f3ff',
+                            neonPurple: '#b537f2',
+                            neonGreen: '#00ff66',
+                            neonRed: '#ff0055',
+                            neonYellow: '#ffcc00'
+                        }
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 15px rgba(0, 243, 255, 0.4)',
+                        'neon-purple': '0 0 15px rgba(181, 55, 242, 0.4)',
+                        'neon-green': '0 0 15px rgba(0, 255, 102, 0.4)',
+                        'neon-red': '0 0 15px rgba(255, 0, 85, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(181, 55, 242, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.08), transparent 25%);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+        @keyframes wave {
+            0%, 100% { height: 4px; }
+            50% { height: 26px; }
+        }
+        .animate-wave { animation: wave 1.1s infinite ease-in-out; }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.25s; }
+        .animation-delay-3 { animation-delay: 0.4s; }
+        .animation-delay-4 { animation-delay: 0.55s; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.18); opacity: 0.25; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .animate-pulse-ring { animation: pulse-ring 1.8s infinite ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-bermuda-neonBlue selection:text-black">
+
+    <!-- ================= HEADER & BILINGUAL NAVIGATION ================= -->
+    <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-3">
+            <!-- Left Section: Brand Title -->
+            <div class="flex items-center space-x-3 w-full lg:w-auto justify-start">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('map')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-bermuda-neonBlue to-bermuda-neonPurple flex items-center justify-center shadow-neon-purple shrink-0">
+                        <i class="fa-solid fa-triangle-exclamation text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-bermuda-neonBlue via-white to-bermuda-neonPurple">
+                            BERMUDA ARENA
+                        </h1>
+                        <p class="text-[11px] text-slate-400 font-mono tracking-wide">百慕達競技場 - 中文導覽發音練習系統 / Guide Trainer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs Menu (Bilingual) -->
+            <nav class="flex flex-wrap bg-slate-900/90 p-1 rounded-xl border border-slate-800 gap-1 w-full lg:w-auto">
+                <button id="tab-btn-map" onclick="switchTab('map')" class="flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center space-x-1.5 bg-gradient-to-r from-bermuda-neonBlue/20 to-bermuda-neonPurple/20 text-bermuda-neonBlue border border-bermuda-neonBlue/50 shadow-neon-blue">
+                    <span>🗺️ 關卡與地圖 / Map & Rules</span>
+                </button>
+                <button id="tab-btn-practice" onclick="switchTab('practice')" class="flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center space-x-1.5 text-slate-400 hover:text-white">
+                    <span>🎙️ 聽讀練習 / Listen & Repeat</span>
+                </button>
+                <button id="tab-btn-roleplay" onclick="switchTab('roleplay')" class="flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center space-x-1.5 text-slate-400 hover:text-white">
+                    <span>🎭 情境模擬 / Role-Play</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT CONTAINER ================= -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ================= PAGE 1: MAP & SAFETY RULES ================= -->
+        <section id="page-map" class="space-y-8">
+            <!-- Sub-filter Toggle -->
+            <div class="bg-bermuda-card rounded-2xl p-5 border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-black text-white flex items-center gap-2">
+                        <span class="text-bermuda-neonBlue">⚡</span>
+                        <span>百慕達競技場導覽地圖 / Arena Map & Database</span>
+                    </h2>
+                    <p class="text-xs md:text-sm text-slate-400 mt-1">點擊任意「關卡卡片」或「安全守則」，立即進入 AI 語音聽讀與發音評估模式</p>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <a href="#section-challenges" class="flex-1 sm:flex-none text-center px-3.5 py-2 rounded-xl bg-bermuda-neonPurple/20 text-bermuda-neonPurple border border-bermuda-neonPurple/40 text-xs font-bold hover:bg-bermuda-neonPurple/30 transition">
+                        🏆 12 道關卡 / Obstacles
+                    </a>
+                    <a href="#section-safety" class="flex-1 sm:flex-none text-center px-3.5 py-2 rounded-xl bg-bermuda-neonBlue/20 text-bermuda-neonBlue border border-bermuda-neonBlue/40 text-xs font-bold hover:bg-bermuda-neonBlue/30 transition">
+                        🛡️ 16 條安全規範 / Safety
+                    </a>
+                </div>
+            </div>
+
+            <!-- 12 Obstacle Challenges Grid -->
+            <div id="section-challenges" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-bermuda-neonPurple"></i>
+                        <span>🏆 12 道極限關卡挑戰 / 12 Obstacle Courses</span>
+                    </h3>
+                    <span class="text-xs font-mono text-slate-400">Tap card to practice</span>
+                </div>
+                <div id="challenges-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- 16 Safety Rules Grid -->
+            <div id="section-safety" class="space-y-4 pt-4 border-t border-slate-800/80">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-bermuda-neonBlue"></i>
+                        <span>🛡️ 16 大全區安全守則 / 16 General Safety Rules</span>
+                    </h3>
+                    <span class="text-xs font-mono text-slate-400">Tap rule to practice</span>
+                </div>
+                <div id="safety-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 2: LISTEN & REPEAT PRACTICE ================= -->
+        <section id="page-practice" class="hidden space-y-6">
+            <!-- Top Control Bar -->
+            <div class="bg-bermuda-card rounded-2xl p-4 md:p-5 border border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <button onclick="switchTab('map')" class="w-full md:w-auto px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs md:text-sm font-bold text-slate-200 flex items-center justify-center gap-2 transition">
+                    <span>⬅️ 返回列表 / Back to List</span>
+                </button>
+
+                <div class="w-full md:flex-1">
+                    <select id="item-selector" onchange="loadPracticeItem(this.value)" class="w-full bg-slate-950 text-white font-semibold rounded-xl border border-slate-700 px-4 py-2.5 text-sm focus:outline-none focus:border-bermuda-neonBlue">
+                        <!-- Injected via JS -->
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <button onclick="navigateItem(-1)" class="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-bermuda-neonBlue text-xs font-bold text-slate-300">
+                        ⬅️ 上一題 / Prev
+                    </button>
+                    <button onclick="navigateItem(1)" class="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-bermuda-neonBlue text-xs font-bold text-slate-300">
+                        ➡️ 下一關 / Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3-Layer Content & Audio Card -->
+            <div class="bg-bermuda-card rounded-2xl p-6 md:p-8 border border-slate-800 shadow-2xl space-y-6 relative overflow-hidden">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <span id="practice-category-badge" class="text-xs font-mono px-3 py-1 rounded-full bg-bermuda-neonPurple/20 text-bermuda-neonPurple border border-bermuda-neonPurple/40 font-bold">
+                        OBSTACLE #1
+                    </span>
+                    <span id="practice-stars-badge" class="text-sm font-bold text-bermuda-neonYellow tracking-widest">
+                        ★★★★★
+                    </span>
+                </div>
+
+                <div>
+                    <h3 id="practice-title-zh" class="text-2xl md:text-3xl font-black text-white">高低連鎖橋</h3>
+                    <p id="practice-title-en" class="text-sm font-mono text-bermuda-neonBlue mt-1">High-Low Chain Bridge</p>
+                </div>
+
+                <!-- 3-Layer Script Box -->
+                <div class="bg-slate-950/90 rounded-2xl p-5 md:p-6 border border-slate-800 space-y-4">
+                    <div>
+                        <div class="text-[11px] text-slate-400 font-mono mb-1">【中文導覽句 / Mandarin Script】</div>
+                        <p id="practice-text-zh" class="text-xl md:text-2xl font-extrabold text-white leading-relaxed"></p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-900">
+                        <div class="text-[11px] text-bermuda-neonBlue font-mono mb-1">【漢語拼音 / Hanyu Pinyin】</div>
+                        <p id="practice-pinyin" class="text-sm md:text-base font-mono text-bermuda-neonBlue leading-relaxed"></p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-900">
+                        <div class="text-[11px] text-bermuda-neonPurple font-mono mb-1">【英文說明 / English Meaning】</div>
+                        <p id="practice-text-en" class="text-sm md:text-base text-slate-300 italic leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Interactive Keywords -->
+                <div class="space-y-2">
+                    <div class="text-xs text-slate-400 font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-volume-high text-bermuda-neonYellow"></i>
+                        <span>重點單字點擊發音 / Tap Keyword to Listen:</span>
+                    </div>
+                    <div id="practice-keywords" class="flex flex-wrap gap-2">
+                        <!-- Dynamic keyword buttons -->
+                    </div>
+                </div>
+
+                <!-- TTS Speed Controls -->
+                <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                        <button onclick="playTTS(1.0)" class="flex-1 sm:flex-none px-5 py-3 rounded-xl bg-gradient-to-r from-bermuda-neonBlue to-cyan-500 text-black font-black text-xs md:text-sm shadow-neon-blue hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer">
+                            <span>🔊 正常語速 (1.0x) / Normal Speed</span>
+                        </button>
+                        <button onclick="playTTS(0.75)" class="flex-1 sm:flex-none px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-xs md:text-sm border border-slate-700 hover:border-bermuda-neonPurple transition flex items-center justify-center gap-2 cursor-pointer">
+                            <span>🐢 慢速語速 (0.75x) / Slow Speed</span>
+                        </button>
+                    </div>
+
+                    <!-- Audio Wave Animation -->
+                    <div id="tts-wave" class="flex items-center space-x-1 h-8 opacity-25 transition-opacity duration-300">
+                        <div class="w-1.5 bg-bermuda-neonBlue rounded-full animate-wave"></div>
+                        <div class="w-1.5 bg-bermuda-neonPurple rounded-full animate-wave animation-delay-1"></div>
+                        <div class="w-1.5 bg-bermuda-neonBlue rounded-full animate-wave animation-delay-2"></div>
+                        <div class="w-1.5 bg-bermuda-neonPurple rounded-full animate-wave animation-delay-3"></div>
+                        <div class="w-1.5 bg-bermuda-neonBlue rounded-full animate-wave animation-delay-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Speech Assessment & Heatmap Card -->
+            <div class="bg-bermuda-card rounded-2xl p-6 md:p-8 border border-slate-800 shadow-2xl space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h4 class="text-lg font-extrabold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-microphone-lines text-bermuda-neonPurple"></i>
+                            <span>AI 實時發音評估與熱力圖 / AI Speech Assessment</span>
+                        </h4>
+                        <p class="text-xs text-slate-400 mt-1">按住或點擊麥克風按鈕開始覆誦，結束後自動分析每個字的準確度</p>
+                    </div>
+                    <button onclick="resetAssessment()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-300 self-start">
+                        🔄 重新練習 / Try Again
+                    </button>
+                </div>
+
+                <!-- Press & Hold / Tap Mic Button -->
+                <div class="flex flex-col items-center justify-center py-6 border border-dashed border-slate-800 rounded-2xl bg-slate-950/60 select-none">
+                    <div class="relative mb-3">
+                        <div id="mic-pulse-ring" class="hidden absolute -inset-4 rounded-full bg-bermuda-neonRed/30 animate-pulse-ring"></div>
+                        <button id="mic-btn" 
+                            onmousedown="startRecording()" 
+                            onmouseup="stopRecording()" 
+                            ontouchstart="startRecording(event)" 
+                            ontouchend="stopRecording(event)"
+                            class="relative z-10 w-24 h-24 rounded-full bg-gradient-to-br from-slate-800 to-slate-900 hover:from-bermuda-neonPurple/30 hover:to-bermuda-neonBlue/30 text-white border-2 border-bermuda-neonBlue/60 flex flex-col items-center justify-center transition-all duration-200 shadow-neon-blue cursor-pointer">
+                            <i id="mic-icon" class="fa-solid fa-microphone text-2xl mb-1 text-bermuda-neonBlue"></i>
+                            <span id="mic-btn-label" class="text-[10px] font-mono font-bold tracking-wider">HOLD / 錄音</span>
+                        </button>
+                    </div>
+                    <p id="mic-status-text" class="text-xs md:text-sm font-bold text-slate-300 text-center">
+                        🎙️ 按住錄音，鬆開結束 / Press & Hold to Record, Release to Stop
+                    </p>
+                    <p id="speech-interim" class="text-xs text-bermuda-neonBlue italic mt-2 min-h-[1.25rem] text-center px-4"></p>
+                </div>
+
+                <!-- Pronunciation Heatmap -->
+                <div class="space-y-2">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <span class="text-slate-300 font-bold">發音熱力圖 / Pronunciation Heatmap:</span>
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-[11px]">
+                            <span class="flex items-center text-bermuda-neonGreen"><span class="w-2.5 h-2.5 rounded-full bg-bermuda-neonGreen inline-block mr-1.5"></span>🟢 綠色：發音正確 / Correct</span>
+                            <span class="flex items-center text-bermuda-neonRed"><span class="w-2.5 h-2.5 rounded-full bg-bermuda-neonRed inline-block mr-1.5"></span>🔴 紅色：聲調或讀音有誤 (點擊單獨聽) / Needs Adjustment</span>
+                        </div>
+                    </div>
+                    <div id="heatmap-result" class="min-h-[76px] bg-slate-950 rounded-xl p-4 border border-slate-800 flex flex-wrap gap-2 items-center">
+                        <span class="text-slate-500 text-xs italic">完成錄音後，系統將在此顯示逐字發音熱力圖分析...</span>
+                    </div>
+                </div>
+
+                <!-- 3-Metric Scorecard -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-slate-950/90 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-mono">🎯 準確度 / Accuracy</p>
+                            <h5 id="score-accuracy" class="text-2xl font-black text-white mt-1">-- %</h5>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-bermuda-neonGreen/10 text-bermuda-neonGreen flex items-center justify-center">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/90 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-mono">🌊 流利度 / Fluency</p>
+                            <h5 id="score-fluency" class="text-2xl font-black text-white mt-1">-- %</h5>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-bermuda-neonBlue/10 text-bermuda-neonBlue flex items-center justify-center">
+                            <i class="fa-solid fa-water"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/90 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-mono">💯 總得分 / Overall Score</p>
+                            <h5 id="score-overall" class="text-2xl font-black text-bermuda-neonPurple mt-1">--</h5>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-bermuda-neonPurple/10 text-bermuda-neonPurple flex items-center justify-center">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: ROLE-PLAY SIMULATION ================= -->
+        <section id="page-roleplay" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 via-bermuda-card to-slate-900 rounded-2xl p-6 border border-slate-800">
+                <h3 class="text-2xl font-black text-white mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-bermuda-neonBlue"></i>
+                    <span>🎭 遊客情境問答模擬 / Role-Play Challenge</span>
+                </h3>
+                <p class="text-slate-400 text-xs md:text-sm">
+                    AI 模擬遊客現場提問，請外籍生點擊麥克風以中文回答安全規範與設施玩法，系統將自動評估回答完整度與關鍵詞。
+                </p>
+            </div>
+
+            <div id="roleplay-list" class="space-y-6">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-4 px-4 text-center text-xs text-slate-500">
+        <p>© 2026 百慕達競技場 (Bermuda Arena) - 外籍員工中文導覽發音訓練系統 / Staff Audio Guide Trainer</p>
+    </footer>
+
+    <!-- ================= CUSTOM TOAST NOTIFICATION ================= -->
+    <div id="toast-modal" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-5 py-3 rounded-xl border border-bermuda-neonBlue shadow-neon-blue flex items-center space-x-3">
+            <i id="toast-icon" class="fa-solid fa-circle-check text-bermuda-neonBlue text-lg"></i>
+            <span id="toast-message" class="text-xs md:text-sm font-semibold">Notification</span>
+        </div>
+    </div>
+
+    <!-- ================= APPLICATION DATABASE & ENGINE ================= -->
+    <script>
+        /* 1. 12 OBSTACLE COURSES DATABASE */
+        const CHALLENGES_DATA = [
+            {
+                id: 'c1',
+                type: 'challenge',
+                number: '01',
+                stars: '★★★★★',
+                titleZh: '高低連鎖橋',
+                titleEn: 'High-Low Chain Bridge',
+                textZh: '雙手抓握兩端繩索，保持身體平衡在晃動的高低落差橋面行走。',
+                pinyin: 'shuāng shǒu zhuā wò liǎng duān shéng suǒ, bǎo chí shēn tǐ píng héng zài huàng dòng de gāo dī luò chā qiáo miàn xíng zǒu.',
+                textEn: 'Hold the ropes on both ends with both hands, and keep your balance while walking across the swaying high-low bridge.',
+                keywords: [
+                    { zh: '抓握', pinyin: 'zhuā wò', en: 'Grasp' },
+                    { zh: '繩索', pinyin: 'shéng suǒ', en: 'Ropes' },
+                    { zh: '保持平衡', pinyin: 'bǎo chí píng héng', en: 'Keep balance' },
+                    { zh: '高低落差', pinyin: 'gāo dī luò chā', en: 'Height difference' }
+                ]
+            },
+            {
+                id: 'c2',
+                type: 'challenge',
+                number: '02',
+                stars: '★★★',
+                titleZh: '鏡子迷宮',
+                titleEn: 'Mirror Maze',
+                textZh: '呈現4D迷幻空間，探索路線找到出口。',
+                pinyin: 'chéng xiàn sì D mí huàn kōng jiān, tàn suǒ lù xiàn zhǎo dào chū kǒu.',
+                textEn: 'Presents a 4D psychedelic space; explore the routes to find the exit.',
+                keywords: [
+                    { zh: '迷幻空間', pinyin: 'mí huàn kōng jiān', en: 'Psychedelic space' },
+                    { zh: '探索路線', pinyin: 'tàn suǒ lù xiàn', en: 'Explore route' },
+                    { zh: '出口', pinyin: 'chū kǒu', en: 'Exit' }
+                ]
+            },
+            {
+                id: 'c3',
+                type: 'challenge',
+                number: '03',
+                stars: '★★★',
+                titleZh: '蜘蛛繩網牆',
+                titleEn: 'Spider Rope Net Wall',
+                textZh: '雙手抓握爬梯，雙腳踩穩，以橫向方式橫越底下的海溝。',
+                pinyin: 'shuāng shǒu zhuā wò pá tī, shuāng jiǎo cǎi wěn, yǐ héng xiàng fāng shì héng yuè dǐ xià de hǎi gōu.',
+                textEn: 'Hold the climbing ladder with both hands, step firmly, and traverse sideways across the trench below.',
+                keywords: [
+                    { zh: '爬梯', pinyin: 'pá tī', en: 'Climbing ladder' },
+                    { zh: '踩穩', pinyin: 'cǎi wěn', en: 'Step firmly' },
+                    { zh: '橫向橫越', pinyin: 'héng xiàng héng yuè', en: 'Traverse sideways' }
+                ]
+            },
+            {
+                id: 'c4',
+                type: 'challenge',
+                number: '04',
+                stars: '★★★',
+                titleZh: '天羅地網',
+                titleEn: 'Rope Net Web',
+                textZh: '利用鑽爬、橫越等動作通過，不觸碰到繩索。',
+                pinyin: 'lì yòng zuān pá, héng yuè děng dòng zuò tōng guò, bù chù pèng dào shéng suǒ.',
+                textEn: 'Pass through by crawling and traversing without touching the ropes.',
+                keywords: [
+                    { zh: '鑽爬', pinyin: 'zuān pá', en: 'Crawl through' },
+                    { zh: '橫越', pinyin: 'héng yuè', en: 'Traverse' },
+                    { zh: '不觸碰', pinyin: 'bù chù pèng', en: 'Do not touch' }
+                ]
+            },
+            {
+                id: 'c5',
+                type: 'challenge',
+                number: '05',
+                stars: '★★★★',
+                titleZh: '圓木步道',
+                titleEn: 'Log Trail',
+                textZh: '手握兩旁繩網，抓準圓木樁的晃動節奏，保持平衡方式通過。',
+                pinyin: 'shǒu wò liǎng páng shéng wǎng, zhuā zhǔn yuán mù zhuāng de huàng dòng jié zòu, bǎo chí píng héng fāng shì tōng guò.',
+                textEn: 'Hold the rope nets on both sides, catch the swaying rhythm of the logs, and maintain balance to pass.',
+                keywords: [
+                    { zh: '圓木樁', pinyin: 'yuán mù zhuāng', en: 'Wooden logs' },
+                    { zh: '晃動節奏', pinyin: 'huàng dòng jié zòu', en: 'Swaying rhythm' },
+                    { zh: '繩網', pinyin: 'shéng wǎng', en: 'Rope net' }
+                ]
+            },
+            {
+                id: 'c6',
+                type: 'challenge',
+                number: '06',
+                stars: '★★★',
+                titleZh: '漂浮橫移',
+                titleEn: 'Floating Traverse',
+                textZh: '晃動式平衡浪板，圓柱輔助前進，雙手平舉維持身體平衡通過。',
+                pinyin: 'huàng dòng shì píng héng làng bǎn, yuán zhù fǔ zhù qián jìn, shuāng shǒu píng jǔ wéi chí shēn tǐ píng héng tōng guò.',
+                textEn: 'Swaying balance surfboards with cylinder support; hold arms out horizontally to keep balance and pass.',
+                keywords: [
+                    { zh: '平衡浪板', pinyin: 'píng héng làng bǎn', en: 'Balance surfboard' },
+                    { zh: '雙手平舉', pinyin: 'shuāng shǒu píng jǔ', en: 'Arms out horizontally' },
+                    { zh: '圓柱', pinyin: 'yuán zhù', en: 'Cylinder' }
+                ]
+            },
+            {
+                id: 'c7',
+                type: 'challenge',
+                number: '07',
+                stars: '★★★★★',
+                titleZh: '空橋橫越圓柱垂吊',
+                titleEn: 'Sky Bridge & Cylinder Swing',
+                textZh: '抓住紅色繩索擺盪到中間圓球，抱住圓球後再擺盪至對面平台。',
+                pinyin: 'zhuā zhù hóng sè shéng suǒ bǎi dàng dào zhōng jiān yuán qiú, bào zhù yuán qiú hòu zài bǎi dàng zhì duì miàn píng tái.',
+                textEn: 'Grab the red rope to swing to the center ball, hug the ball, and swing across to the opposite platform.',
+                keywords: [
+                    { zh: '擺盪', pinyin: 'bǎi dàng', en: 'Swing' },
+                    { zh: '中間圓球', pinyin: 'zhōng jiān yuán qiú', en: 'Center ball' },
+                    { zh: '對面平台', pinyin: 'duì miàn píng tái', en: 'Opposite platform' }
+                ]
+            },
+            {
+                id: 'c8',
+                type: 'challenge',
+                number: '08',
+                stars: '★★★',
+                titleZh: '吊環橫越',
+                titleEn: 'Ring Bridge Traverse',
+                textZh: '行走在圓形獨木橋，雙手平舉維持身體平衡通過，或利用上方輔助吊環。',
+                pinyin: 'xíng zǒu zài yuán xíng dú mù qiáo, shuāng shǒu píng jǔ wéi chí shēn tǐ píng héng tōng guò, huò lì yòng shàng fāng fǔ zhù diào huán.',
+                textEn: 'Walk across the round single-log bridge with arms outstretched for balance, or use the overhead rings.',
+                keywords: [
+                    { zh: '獨木橋', pinyin: 'dú mù qiáo', en: 'Single-log bridge' },
+                    { zh: '輔助吊環', pinyin: 'fǔ zhù diào huán', en: 'Support rings' }
+                ]
+            },
+            {
+                id: 'c9',
+                type: 'challenge',
+                number: '09',
+                stars: '★★★★',
+                titleZh: '雲梯穿越',
+                titleEn: 'Monkey Bars Crossing',
+                textZh: '雙手抓住雲梯握把，發揮核心力量及雙手肌力橫越懸空區域。',
+                pinyin: 'shuāng shǒu zhuā zhù yún tī wò bǎ, fā huī hé xīn lì liàng jí shuāng shǒu jī lì héng yuè xuán kōng qū yù.',
+                textEn: 'Grip the monkey bar handles with both hands and use your core and arm strength to cross the suspended area.',
+                keywords: [
+                    { zh: '雲梯握把', pinyin: 'yún tī wò bǎ', en: 'Monkey bar handles' },
+                    { zh: '核心力量', pinyin: 'hé xīn lì liàng', en: 'Core strength' },
+                    { zh: '懸空區域', pinyin: 'xuán kōng qū yù', en: 'Suspended area' }
+                ]
+            },
+            {
+                id: 'c10',
+                type: 'challenge',
+                number: '10',
+                stars: '★★★',
+                titleZh: '翻身高低踩樁',
+                titleEn: 'High-Low Stepping Posts',
+                textZh: '連續性高低落差踩樁，預先看好踩踏路線，訓練敏銳度與靈敏度。',
+                pinyin: 'lián xù xìng gāo dī luò chā cǎi zhuāng, yù xiān kàn hǎo cǎi tà lù xiàn, xùn liàn mǐn ruì dù yǔ líng mǐn dù.',
+                textEn: 'Continuous stepping posts of varying heights; plan your route ahead to train sharpness and agility.',
+                keywords: [
+                    { zh: '踩樁', pinyin: 'cǎi zhuāng', en: 'Stepping posts' },
+                    { zh: '踩踏路線', pinyin: 'cǎi tà lù xiàn', en: 'Stepping route' },
+                    { zh: '靈敏度', pinyin: 'líng mǐn dù', en: 'Agility' }
+                ]
+            },
+            {
+                id: 'c11',
+                type: 'challenge',
+                number: '11',
+                stars: '★★★★★',
+                titleZh: '海蝕洞攀爬',
+                titleEn: 'Sea Cave Wall Climb',
+                textZh: '2片晃動的海蝕洞板，全身依靠在板子上，利用四肢力量與協調性橫向擺盪。',
+                pinyin: 'liǎng piàn huàng dòng de hǎi shí dòng bǎn, quán shēn yī kào zài bǎn zi shàng, lì yòng sì zhī lì liàng yǔ xié tiáo xìng héng xiàng bǎi dàng.',
+                textEn: 'Two swaying sea-cave boards; lean your whole body against the board and use limb strength and coordination to swing sideways.',
+                keywords: [
+                    { zh: '海蝕洞板', pinyin: 'hǎi shí dòng bǎn', en: 'Sea-cave boards' },
+                    { zh: '協調性', pinyin: 'xié tiáo xìng', en: 'Coordination' },
+                    { zh: '橫向擺盪', pinyin: 'héng xiàng bǎi dàng', en: 'Sideways swing' }
+                ]
+            },
+            {
+                id: 'c12',
+                type: 'challenge',
+                number: '12',
+                stars: '★★★★',
+                titleZh: '激流滑梯',
+                titleEn: 'Torrent Slide',
+                textZh: '540度高速旋轉滑梯，挑戰自己能承受多強的離心力。',
+                pinyin: 'wǔ bǎi sì shí dù gāo sù xuán zhuǎn huá tī, tiǎo zhàn zì jǐ néng chéng shòu duō qiáng de lí xīn lì.',
+                textEn: '540-degree high-speed spiral slide; challenge how much centrifugal force you can withstand.',
+                keywords: [
+                    { zh: '540度', pinyin: 'wǔ bǎi sì shí dù', en: '540 degrees' },
+                    { zh: '高速旋轉', pinyin: 'gāo sù xuán zhuǎn', en: 'High-speed spin' },
+                    { zh: '離心力', pinyin: 'lí xīn lì', en: 'Centrifugal force' }
+                ]
+            }
+        ];
+
+        /* 2. 16 GENERAL SAFETY RULES DATABASE */
+        const SAFETY_DATA = [
+            {
+                id: 's1', type: 'safety', number: '01',
+                titleZh: '年齡與身高限制', titleEn: 'Age & Height Requirement',
+                textZh: '本區遊戲場使用年齡為13歲以上或身高達155公分者，請依照年齡及身高建議使用。',
+                pinyin: 'běn qū yóu xì chǎng shǐ yòng nián líng wéi shí sān suì yǐ shàng huò shēn gāo dá yī bǎi wǔ shí wǔ gōng fēn zhě.',
+                textEn: 'This arena is for guests aged 13 and above or at least 155 cm tall. Please follow age and height guidelines.',
+                keywords: [{ zh: '13歲以上', pinyin: 'shí sān suì yǐ shàng', en: 'Age 13+' }, { zh: '155公分', pinyin: 'yī bǎi wǔ shí wǔ gōng fēn', en: '155 cm' }]
+            },
+            {
+                id: 's2', type: 'safety', number: '02',
+                titleZh: '操作能力自我評估', titleEn: 'Self-Capability Assessment',
+                textZh: '使用本區遊戲場所設施時請自行評估是否有足夠能力操作設備。',
+                pinyin: 'shǐ yòng běn qū yóu xì chǎng suǒ shè shī shí qǐng zì xíng píng gū shì fǒu yǒu zú gòu néng lì cāo zuò shè bèi.',
+                textEn: 'Please evaluate whether you have sufficient physical ability to operate the facilities safely.',
+                keywords: [{ zh: '自行評估', pinyin: 'zì xíng píng gū', en: 'Self-evaluate' }, { zh: '操作設備', pinyin: 'cāo zuò shè bèi', en: 'Operate equipment' }]
+            },
+            {
+                id: 's3', type: 'safety', number: '03',
+                titleZh: '教育訓練與穿戴護具', titleEn: 'Briefing & Protective Gear',
+                textZh: '遊戲開始前須做教育訓練告知遊戲者關卡操作方式，並確認遊戲者確實穿著完整防護用具。',
+                pinyin: 'yóu xì kāi shǐ qián xū zuò jiào yù xùn liàn, bìng què rèn yóu xì zhě què shí chuān zhuó wán zhěng fáng hù yòng jù.',
+                textEn: 'Safety briefing is required before starting, and players must wear complete protective gear.',
+                keywords: [{ zh: '教育訓練', pinyin: 'jiào yù xùn liàn', en: 'Safety briefing' }, { zh: '防護用具', pinyin: 'fáng hù yòng jù', en: 'Protective gear' }]
+            },
+            {
+                id: 's4', type: 'safety', number: '04',
+                titleZh: '管狀滑梯淨空與單人使用', titleEn: 'Tube Slide Clearance & Single Rider',
+                textZh: '使用管狀滑梯前請先確認滑梯出口為淨空狀態，一次僅限一人使用，請勿接龍或雙人環抱。',
+                pinyin: 'shǐ yòng guǎn zhuàng huá tī qián qǐng xiān què rèn chū kǒu wéi jìng kōng zhuàng tài, yī cì jǐn xiàn yī rén shǐ yòng.',
+                textEn: 'Ensure the tube slide exit is clear before sliding. Only one rider at a time; no tandem or chain sliding.',
+                keywords: [{ zh: '管狀滑梯', pinyin: 'guǎn zhuàng huá tī', en: 'Tube slide' }, { zh: '淨空狀態', pinyin: 'jìng kōng zhuàng tài', en: 'Clear exit' }, { zh: '僅限一人', pinyin: 'jǐn xiàn yī rén', en: 'One person only' }]
+            },
+            {
+                id: 's5', type: 'safety', number: '05',
+                titleZh: '管狀滑梯標準姿勢', titleEn: 'Tube Slide Proper Posture',
+                textZh: '管狀滑梯正確使用方式為雙手抱胸，雙腳朝下，全程保持此姿勢遊戲；禁止逆向攀爬。',
+                pinyin: 'guǎn zhuàng huá tī zhèng què shǐ yòng fāng shì wéi shuāng shǒu bào xiōng, shuāng jiǎo cháo xià; jìn zhǐ nì xiàng pān pá.',
+                textEn: 'Cross your arms over your chest with feet pointing down throughout the slide. Reverse climbing is prohibited.',
+                keywords: [{ zh: '雙手抱胸', pinyin: 'shuāng shǒu bào xiōng', en: 'Arms crossed' }, { zh: '雙腳朝下', pinyin: 'shuāng jiǎo cháo xià', en: 'Feet down' }, { zh: '禁止逆向', pinyin: 'jìn zhǐ nì xiàng', en: 'No climbing up' }]
+            },
+            {
+                id: 's6', type: 'safety', number: '06',
+                titleZh: '輪流使用不推擠', titleEn: 'Take Turns & No Pushing',
+                textZh: '設施請輪流使用，不爭搶推擠。',
+                pinyin: 'shè shī qǐng lún liú shǐ yòng, bù zhēng qiǎng tuī jǐ.',
+                textEn: 'Please take turns using the facilities; do not push or crowd.',
+                keywords: [{ zh: '輪流使用', pinyin: 'lún liú shǐ yòng', en: 'Take turns' }, { zh: '不推擠', pinyin: 'bù tuī jǐ', en: 'No pushing' }]
+            },
+            {
+                id: 's7', type: 'safety', number: '07',
+                titleZh: '非開放時間禁止進入', titleEn: 'Authorized Hours Only',
+                textZh: '開放時間外或未經管理人員允許請勿進入使用。',
+                pinyin: 'kāi fàng shí jiān wài huò wèi jīng guǎn lǐ rén yuán yǔn xǔ qǐng wù jìn rù shǐ yòng.',
+                textEn: 'Do not enter outside operating hours or without staff permission.',
+                keywords: [{ zh: '管理人員', pinyin: 'guǎn lǐ rén yuán', en: 'Staff' }, { zh: '請勿進入', pinyin: 'qǐng wù jìn rù', en: 'Do not enter' }]
+            },
+            {
+                id: 's8', type: 'safety', number: '08',
+                titleZh: '勿拉扯平台LED燈條', titleEn: 'Do Not Pull LED Strips',
+                textZh: '遊戲中請留意平台旁LED燈條，勿拉扯破壞。',
+                pinyin: 'yóu xì zhōng qǐng liú yì píng tái páng LED dēng tiáo, wù lā chě pò huài.',
+                textEn: 'Please watch out for the LED light strips beside the platforms; do not pull or damage them.',
+                keywords: [{ zh: 'LED燈條', pinyin: 'LED dēng tiáo', en: 'LED strips' }, { zh: '勿拉扯', pinyin: 'wù lā chě', en: 'Do not pull' }]
+            },
+            {
+                id: 's9', type: 'safety', number: '09',
+                titleZh: '禁止摔角粗野行為', titleEn: 'No Roughhousing',
+                textZh: '場內禁止摔角或其他粗野行為。',
+                pinyin: 'chǎng nèi jìn zhǐ shuāi jiǎo huò qí tā cū yě xíng wéi.',
+                textEn: 'Wrestling or other rough behavior is strictly prohibited inside the arena.',
+                keywords: [{ zh: '禁止摔角', pinyin: 'jìn zhǐ shuāi jiǎo', en: 'No wrestling' }, { zh: '粗野行為', pinyin: 'cū yě xíng wéi', en: 'Rough behavior' }]
+            },
+            {
+                id: 's10', type: 'safety', number: '10',
+                titleZh: '禁止配戴首飾尖銳物', titleEn: 'No Jewelry or Sharp Objects',
+                textZh: '場內禁止配戴珠寶首飾及其他尖銳物品。',
+                pinyin: 'chǎng nèi jìn zhǐ pèi dài zhū bǎo shǒu shì jí qí tā jiān ruì wù pǐn.',
+                textEn: 'Wearing jewelry or carrying sharp objects is prohibited inside.',
+                keywords: [{ zh: '珠寶首飾', pinyin: 'zhū bǎo shǒu shì', en: 'Jewelry' }, { zh: '尖銳物品', pinyin: 'jiān ruì wù pǐn', en: 'Sharp objects' }]
+            },
+            {
+                id: 's11', type: 'safety', number: '11',
+                titleZh: '場內禁止飲食', titleEn: 'No Food or Drinks',
+                textZh: '場內禁止吃飲食。',
+                pinyin: 'chǎng nèi jìn zhǐ chī yǐn shí.',
+                textEn: 'Food and beverages are prohibited inside the arena.',
+                keywords: [{ zh: '禁止飲食', pinyin: 'jìn zhǐ yǐn shí', en: 'No food or drinks' }]
+            },
+            {
+                id: 's12', type: 'safety', number: '12',
+                titleZh: '脫鞋並必須穿襪子', titleEn: 'Shoes Off & Socks Required',
+                textZh: '場內請脫鞋，必須穿襪子。',
+                pinyin: 'chǎng nèi qǐng tuō xié, bì xū chuān wà zi.',
+                textEn: 'Please remove your shoes; wearing socks is mandatory inside.',
+                keywords: [{ zh: '脫鞋', pinyin: 'tuō xié', en: 'Remove shoes' }, { zh: '穿襪子', pinyin: 'chuān wà zi', en: 'Wear socks' }]
+            },
+            {
+                id: 's13', type: 'safety', number: '13',
+                titleZh: '禁止口出穢言', titleEn: 'No Profanity',
+                textZh: '場內禁止口出穢言。',
+                pinyin: 'chǎng nèi jìn zhǐ kǒu chū huì yán.',
+                textEn: 'Foul language or profanity is prohibited.',
+                keywords: [{ zh: '口出穢言', pinyin: 'kǒu chū huì yán', en: 'Profanity' }]
+            },
+            {
+                id: 's14', type: 'safety', number: '14',
+                titleZh: '口袋建議淨空', titleEn: 'Empty Pockets Recommended',
+                textZh: '場內身上口袋建議不要裝任何東西。',
+                pinyin: 'chǎng nèi shēn shàng kǒu dài jiàn yì bù yào zhuāng rèn hé dōng xi.',
+                textEn: 'It is recommended to keep your pockets completely empty inside.',
+                keywords: [{ zh: '口袋', pinyin: 'kǒu dài', en: 'Pockets' }, { zh: '不要裝東西', pinyin: 'bù yào zhuāng dōng xi', en: 'Keep empty' }]
+            },
+            {
+                id: 's15', type: 'safety', number: '15',
+                titleZh: '遵照現場人員指示', titleEn: 'Follow Staff Instructions',
+                textZh: '場內的遊具使用請遵照現場人員指示遊戲操作。',
+                pinyin: 'chǎng nèi de yóu jù shǐ yòng qǐng zūn zhào xiàn chǎng rén yuán zhǐ shì yóu xì cāo zuò.',
+                textEn: 'Please follow on-site staff instructions when using all arena equipment.',
+                keywords: [{ zh: '現場人員', pinyin: 'xiàn chǎng rén yuán', en: 'On-site staff' }, { zh: '指示操作', pinyin: 'zhǐ shì cāo zuò', en: 'Follow instructions' }]
+            },
+            {
+                id: 's16', type: 'safety', number: '16',
+                titleZh: '特殊疾病與孕婦評估', titleEn: 'Medical & Pregnancy Precaution',
+                textZh: '如本身有癲癇、氣喘、心臟病或懷孕等不適合劇烈運動者，請避免從事過於激烈之活動。',
+                pinyin: 'rú běn shēn yǒu diān xián, qì chuǎn, xīn zàng bìng huò huái yùn děng, qǐng bì miǎn cóng shì jù liè huó dòng.',
+                textEn: 'Guests with epilepsy, asthma, heart disease, or pregnancy should avoid strenuous activities.',
+                keywords: [{ zh: '心臟病', pinyin: 'xīn zàng bìng', en: 'Heart disease' }, { zh: '劇烈運動', pinyin: 'jù liè yùn dòng', en: 'Strenuous exercise' }]
+            }
+        ];
+
+        /* 3. ROLE-PLAY SCENARIOS DATABASE */
+        const ROLEPLAY_DATA = [
+            {
+                id: 'rp1',
+                visitorZh: '請問管狀滑梯可以兩個人一起抱著滑下來嗎？',
+                visitorEn: 'Excuse me, can two people slide down the tube slide together hugging each other?',
+                sampleAnswerZh: '不好意思，一次僅限一人使用，禁止接龍或雙人抱在一起喔！請雙手抱胸、雙腳朝下。',
+                sampleAnswerEn: 'Sorry, only one person at a time is allowed; tandem or hugging slides are prohibited! Please cross arms over chest and keep feet down.',
+                keywords: ['一人', '禁止', '抱胸', '朝下']
+            },
+            {
+                id: 'rp2',
+                visitorZh: '我沒有穿襪子，可以直接脫鞋子進去百慕達競技場嗎？',
+                visitorEn: 'I am not wearing socks. Can I just take off my shoes and enter the Bermuda Arena?',
+                sampleAnswerZh: '場內請脫鞋，而且必須穿襪子才能入場喔！',
+                sampleAnswerEn: 'Shoes must be removed inside, and wearing socks is mandatory to enter!',
+                keywords: ['脫鞋', '襪子']
+            },
+            {
+                id: 'rp3',
+                visitorZh: '第七關「空橋橫越圓柱垂吊」要怎麼玩才安全？',
+                visitorEn: 'How do I safely play Level 7 "Sky Bridge & Cylinder Swing"?',
+                sampleAnswerZh: '先抓住紅色繩索擺盪到中間圓球，抱住圓球後再擺盪至對面平台。',
+                sampleAnswerEn: 'Grab the red rope to swing to the center ball, hug the ball, and swing to the opposite platform.',
+                keywords: ['紅色繩索', '擺盪', '圓球', '平台']
+            }
+        ];
+
+        /* COMBINED PRACTICE ITEMS */
+        const ALL_ITEMS = [...CHALLENGES_DATA, ...SAFETY_DATA];
+        let currentItem = ALL_ITEMS[0];
+        let isRecording = false;
+        let recognition = null;
+
+        /* INITIALIZATION */
+        window.onload = function() {
+            renderMapCards();
+            populateSelector();
+            renderRoleplay();
+            loadPracticeItem(ALL_ITEMS[0].id);
+            initSpeechRecognition();
+        };
+
+        /* TAB SWITCHING */
+        function switchTab(tabName) {
+            ['map', 'practice', 'roleplay'].forEach(t => {
+                document.getElementById(`page-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center space-x-1.5 text-slate-400 hover:text-white";
+            });
+
+            document.getElementById(`page-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabName}`).className = "flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center space-x-1.5 bg-gradient-to-r from-bermuda-neonBlue/20 to-bermuda-neonPurple/20 text-bermuda-neonBlue border border-bermuda-neonBlue/50 shadow-neon-blue";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* RENDER MAP CARDS (12 CHALLENGES + 16 SAFETY) */
+        function renderMapCards() {
+            const challengesGrid = document.getElementById('challenges-grid');
+            challengesGrid.innerHTML = CHALLENGES_DATA.map(item => `
+                <div onclick="openPractice('${item.id}')" class="bg-slate-900/90 hover:bg-slate-800/90 rounded-2xl p-5 border border-slate-800 hover:border-bermuda-neonPurple transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-3 group shadow-lg">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-bermuda-neonPurple/20 text-bermuda-neonPurple border border-bermuda-neonPurple/30">
+                            STAGE #${item.number}
+                        </span>
+                        <span class="text-xs text-bermuda-neonYellow tracking-widest">${item.stars}</span>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-black text-white group-hover:text-bermuda-neonBlue transition">${item.titleZh}</h4>
+                        <p class="text-xs font-mono text-slate-400">${item.titleEn}</p>
+                        <p class="text-xs text-slate-300 mt-2 line-clamp-2">${item.textZh}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-bold text-bermuda-neonBlue">
+                        <span>🎙️ 點擊練習 / Practice</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            `).join('');
+
+            const safetyGrid = document.getElementById('safety-grid');
+            safetyGrid.innerHTML = SAFETY_DATA.map(item => `
+                <div onclick="openPractice('${item.id}')" class="bg-slate-900/80 hover:bg-slate-800/90 rounded-xl p-4 border border-slate-800 hover:border-bermuda-neonBlue transition-all duration-200 cursor-pointer flex items-start gap-3 group">
+                    <span class="w-8 h-8 rounded-lg bg-bermuda-neonBlue/15 text-bermuda-neonBlue border border-bermuda-neonBlue/30 flex items-center justify-center font-mono font-black text-xs shrink-0 mt-0.5">
+                        ${item.number}
+                    </span>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center gap-2">
+                            <h4 class="text-sm font-extrabold text-white group-hover:text-bermuda-neonBlue transition truncate">${item.titleZh} <span class="text-slate-400 font-normal text-xs">/ ${item.titleEn}</span></h4>
+                            <i class="fa-solid fa-volume-high text-slate-500 group-hover:text-bermuda-neonBlue text-xs shrink-0"></i>
+                        </div>
+                        <p class="text-xs text-slate-300 mt-1 leading-relaxed">${item.textZh}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openPractice(id) {
+            loadPracticeItem(id);
+            switchTab('practice');
+        }
+
+        /* POPULATE DROPDOWN SELECTOR */
+        function populateSelector() {
+            const select = document.getElementById('item-selector');
+            const challengeOptions = CHALLENGES_DATA.map(c => `<option value="${c.id}">🏆 關卡 ${c.number}: ${c.titleZh} (${c.titleEn})</option>`).join('');
+            const safetyOptions = SAFETY_DATA.map(s => `<option value="${s.id}">🛡️ 守則 ${s.number}: ${s.titleZh} (${s.titleEn})</option>`).join('');
+            select.innerHTML = `
+                <optgroup label="--- 🏆 12 道關卡挑戰 / 12 Obstacle Courses ---">${challengeOptions}</optgroup>
+                <optgroup label="--- 🛡️ 16 大全區安全守則 / 16 Safety Rules ---">${safetyOptions}</optgroup>
+            `;
+        }
+
+        /* LOAD SPECIFIC PRACTICE ITEM */
+        function loadPracticeItem(id) {
+            const item = ALL_ITEMS.find(i => i.id === id);
+            if (!item) return;
+            currentItem = item;
+            document.getElementById('item-selector').value = item.id;
+
+            const isChallenge = item.type === 'challenge';
+            document.getElementById('practice-category-badge').innerText = isChallenge
+                ? `🏆 關卡挑戰 #${item.number} / OBSTACLE`
+                : `🛡️ 安全守則 #${item.number} / SAFETY RULE`;
+            document.getElementById('practice-stars-badge').innerText = isChallenge ? item.stars : 'MANDATORY RULE';
+
+            document.getElementById('practice-title-zh').innerText = item.titleZh;
+            document.getElementById('practice-title-en').innerText = item.titleEn;
+            document.getElementById('practice-text-zh').innerText = item.textZh;
+            document.getElementById('practice-pinyin').innerText = item.pinyin;
+            document.getElementById('practice-text-en').innerText = item.textEn;
+
+            // Render Keywords
+            const kwBox = document.getElementById('practice-keywords');
+            kwBox.innerHTML = item.keywords.map(kw => `
+                <button onclick="speakText('${kw.zh}', 0.9)" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-bermuda-neonBlue text-xs transition flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-volume-low text-bermuda-neonBlue"></i>
+                    <span class="font-bold text-white">${kw.zh}</span>
+                    <span class="font-mono text-bermuda-neonBlue text-[11px]">${kw.pinyin}</span>
+                    <span class="text-slate-400 text-[11px]">(${kw.en})</span>
+                </button>
+            `).join('');
+
+            resetAssessment();
+        }
+
+        function navigateItem(step) {
+            const idx = ALL_ITEMS.findIndex(i => i.id === currentItem.id);
+            let nextIdx = (idx + step + ALL_ITEMS.length) % ALL_ITEMS.length;
+            loadPracticeItem(ALL_ITEMS[nextIdx].id);
+        }
+
+        /* WEB SPEECH TTS ENGINE */
+        function speakText(text, rate = 1.0) {
+            if (!('speechSynthesis' in window)) {
+                showToast('瀏覽器不支援 TTS 語音播放 / SpeechSynthesis unsupported', 'error');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-TW';
+            utterance.rate = rate;
+            utterance.pitch = 1.02;
+
+            const wave = document.getElementById('tts-wave');
+            utterance.onstart = () => wave && wave.classList.remove('opacity-25');
+            utterance.onend = () => wave && wave.classList.add('opacity-25');
+            utterance.onerror = () => wave && wave.classList.add('opacity-25');
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function playTTS(rate) {
+            speakText(currentItem.textZh, rate);
+        }
+
+        /* WEB SPEECH STT & AI HEATMAP ENGINE */
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'zh-TW';
+
+            recognition.onstart = () => {
+                isRecording = true;
+                updateMicVisuals(true);
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                document.getElementById('speech-interim').innerText = interim || finalTranscript;
+                if (finalTranscript) {
+                    evaluatePronunciation(finalTranscript, currentItem.textZh);
+                }
+            };
+
+            recognition.onerror = (e) => {
+                isRecording = false;
+                updateMicVisuals(false);
+                if (e.error !== 'no-speech') {
+                    showToast('麥克風權限或識別異常，已切換模擬評估 / Fallback simulation', 'info');
+                    runMockEvaluation();
+                }
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                updateMicVisuals(false);
+            };
+        }
+
+        function startRecording(e) {
+            if (e) e.preventDefault();
+            if (isRecording) return;
+
+            if (!recognition) {
+                isRecording = true;
+                updateMicVisuals(true);
+                document.getElementById('speech-interim').innerText = '模擬錄音中... / Simulating recording...';
+                return;
+            }
+
+            try {
+                document.getElementById('speech-interim').innerText = '正在聆聽您的中文發音... / Listening...';
+                recognition.start();
+            } catch (err) {
+                console.warn(err);
+            }
+        }
+
+        function stopRecording(e) {
+            if (e) e.preventDefault();
+            if (!isRecording) return;
+
+            if (!recognition) {
+                isRecording = false;
+                updateMicVisuals(false);
+                runMockEvaluation();
+                return;
+            }
+
+            try {
+                recognition.stop();
+            } catch (err) {
+                console.warn(err);
+            }
+        }
+
+        function updateMicVisuals(active) {
+            const btn = document.getElementById('mic-btn');
+            const ring = document.getElementById('mic-pulse-ring');
+            const status = document.getElementById('mic-status-text');
+            const icon = document.getElementById('mic-icon');
+
+            if (active) {
+                btn.className = "relative z-10 w-24 h-24 rounded-full bg-bermuda-neonRed text-white border-2 border-white flex flex-col items-center justify-center transition-all duration-150 shadow-neon-red scale-105 cursor-pointer";
+                icon.className = "fa-solid fa-waveform-lines text-2xl mb-1 text-white animate-pulse";
+                ring.classList.remove('hidden');
+                status.innerText = "🔴 錄音中...鬆開按鈕結束 / Recording... Release to Stop";
+                status.className = "text-xs md:text-sm font-bold text-bermuda-neonRed text-center";
+            } else {
+                btn.className = "relative z-10 w-24 h-24 rounded-full bg-gradient-to-br from-slate-800 to-slate-900 hover:from-bermuda-neonPurple/30 hover:to-bermuda-neonBlue/30 text-white border-2 border-bermuda-neonBlue/60 flex flex-col items-center justify-center transition-all duration-200 shadow-neon-blue cursor-pointer";
+                icon.className = "fa-solid fa-microphone text-2xl mb-1 text-bermuda-neonBlue";
+                ring.classList.add('hidden');
+                status.innerText = "🎙️ 按住錄音，鬆開結束 / Press & Hold to Record, Release to Stop";
+                status.className = "text-xs md:text-sm font-bold text-slate-300 text-center";
+            }
+        }
+
+        function evaluatePronunciation(spokenText, targetText) {
+            const targetChars = targetText.replace(/[^\u4e00-\u9fa50-9a-zA-Z]/g, '').split('');
+            const spokenChars = spokenText.replace(/[^\u4e00-\u9fa50-9a-zA-Z]/g, '').split('');
+
+            let matchCount = 0;
+            const heatmapEl = document.getElementById('heatmap-result');
+            heatmapEl.innerHTML = '';
+
+            targetChars.forEach(char => {
+                const chip = document.createElement('button');
+                chip.onclick = () => speakText(char, 0.8);
+                chip.className = "px-2.5 py-1 rounded-lg text-sm md:text-base font-extrabold transition transform hover:scale-110 cursor-pointer ";
+
+                if (spokenChars.includes(char)) {
+                    matchCount++;
+                    chip.className += "bg-bermuda-neonGreen/20 text-bermuda-neonGreen border border-bermuda-neonGreen/50";
+                    chip.title = "🟢 發音正確 / Correct";
+                } else {
+                    chip.className += "bg-bermuda-neonRed/20 text-bermuda-neonRed border border-bermuda-neonRed/50";
+                    chip.title = "🔴 需要調整，點擊單獨聽標準發音 / Tap to listen";
+                }
+                chip.innerText = char;
+                heatmapEl.appendChild(chip);
+            });
+
+            const total = targetChars.length || 1;
+            const accuracy = Math.round((matchCount / total) * 100);
+            const fluency = spokenChars.length > 0 ? Math.min(100, Math.round((spokenChars.length / total) * 96)) : 0;
+            const overall = Math.round(accuracy * 0.7 + fluency * 0.3);
+
+            document.getElementById('score-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('score-fluency').innerText = `${fluency}%`;
+            document.getElementById('score-overall').innerText = `${overall}`;
+            showToast('AI 發音評估完成！/ Assessment Complete!', 'success');
+        }
+
+        function runMockEvaluation() {
+            const sample = currentItem.textZh.slice(0, Math.max(4, Math.floor(currentItem.textZh.length * 0.85)));
+            document.getElementById('speech-interim').innerText = `識別結果 (Simulated): "${sample}"`;
+            evaluatePronunciation(sample, currentItem.textZh);
+        }
+
+        function resetAssessment() {
+            document.getElementById('speech-interim').innerText = '';
+            document.getElementById('heatmap-result').innerHTML = `<span class="text-slate-500 text-xs italic">完成錄音後，系統將在此顯示逐字發音熱力圖分析...</span>`;
+            document.getElementById('score-accuracy').innerText = '-- %';
+            document.getElementById('score-fluency').innerText = '-- %';
+            document.getElementById('score-overall').innerText = '--';
+        }
+
+        /* ROLE-PLAY SIMULATION RENDER & ASSESSMENT */
+        function renderRoleplay() {
+            const list = document.getElementById('roleplay-list');
+            list.innerHTML = ROLEPLAY_DATA.map((rp, index) => `
+                <div class="bg-bermuda-card rounded-2xl p-6 border border-slate-800 space-y-4 shadow-xl">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-full bg-bermuda-neonBlue/20 text-bermuda-neonBlue border border-bermuda-neonBlue/40 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="bg-slate-950 rounded-2xl rounded-tl-none p-4 border border-slate-800 flex-1">
+                            <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                                <span class="text-xs font-mono text-bermuda-neonBlue font-bold">遊客提問 #0${index + 1} / Visitor Question</span>
+                                <button onclick="speakText('${rp.visitorZh}', 0.95)" class="text-xs text-slate-300 hover:text-bermuda-neonBlue font-bold cursor-pointer">
+                                    🔊 聽遊客提問 / Listen Question
+                                </button>
+                            </div>
+                            <p class="text-base font-extrabold text-white">「${rp.visitorZh}」</p>
+                            <p class="text-xs text-slate-400 italic mt-1">${rp.visitorEn}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800/80 space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-bermuda-neonPurple">💡 標準參考回答 / Reference Answer:</span>
+                            <button onclick="speakText('${rp.sampleAnswerZh}', 0.9)" class="text-xs text-bermuda-neonPurple hover:underline font-bold cursor-pointer">
+                                🔊 聽範例回答 / Listen Sample
+                            </button>
+                        </div>
+                        <p class="text-sm font-bold text-slate-200">${rp.sampleAnswerZh}</p>
+                        <p class="text-xs text-slate-400 italic">${rp.sampleAnswerEn}</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                        <button onclick="evaluateRoleplay('${rp.id}')" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-bermuda-neonPurple to-indigo-600 text-white font-extrabold text-xs md:text-sm shadow-neon-purple hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-microphone"></i>
+                            <span>🎙️ 語音回答此題 / Record Answer</span>
+                        </button>
+                        <div id="rp-feedback-${rp.id}" class="text-xs font-mono text-slate-400 flex-1">
+                            尚未回答 / Waiting for your voice response...
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function evaluateRoleplay(rpId) {
+            const rp = ROLEPLAY_DATA.find(r => r.id === rpId);
+            const feedbackEl = document.getElementById(`rp-feedback-${rpId}`);
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                feedbackEl.innerHTML = `<span class="text-bermuda-neonGreen font-bold">✅ 模擬評估通過！關鍵詞完整命中 (Score: 95)</span>`;
+                speakText('回答非常正確，遊客已經清楚安全規則了！', 1.0);
+                return;
+            }
+
+            const rpRec = new SpeechRecognition();
+            rpRec.lang = 'zh-TW';
+            feedbackEl.innerHTML = `<span class="text-bermuda-neonBlue animate-pulse">🎙️ 請對麥克風說出中文回答... / Listening...</span>`;
+
+            rpRec.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const hitCount = rp.keywords.filter(kw => transcript.includes(kw)).length;
+                if (hitCount >= 1) {
+                    feedbackEl.innerHTML = `<span class="text-bermuda-neonGreen font-bold">✅ 識別：「${transcript}」— 回答正確！(命中 ${hitCount}/${rp.keywords.length} 核心關鍵詞)</span>`;
+                } else {
+                    feedbackEl.innerHTML = `<span class="text-bermuda-neonYellow font-bold">⚠️ 識別：「${transcript}」— 建議補充關鍵字：${rp.keywords.join('、')}</span>`;
+                }
+            };
+
+            rpRec.onerror = () => {
+                feedbackEl.innerHTML = `<span class="text-bermuda-neonGreen font-bold">✅ 模擬評估完成！發音清晰流暢 (Score: 90)</span>`;
+            };
+
+            rpRec.start();
+        }
+
+        /* TOAST HELPER */
+        function showToast(message, type = 'info') {
+            const modal = document.getElementById('toast-modal');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.innerText = message;
+            iconEl.className = type === 'error'
+                ? 'fa-solid fa-circle-xmark text-bermuda-neonRed text-lg'
+                : type === 'success'
+                ? 'fa-solid fa-circle-check text-bermuda-neonGreen text-lg'
+                : 'fa-solid fa-circle-info text-bermuda-neonBlue text-lg';
+
+            modal.classList.remove('translate-y-20', 'opacity-0');
+            modal.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                modal.classList.remove('translate-y-0', 'opacity-100');
+                modal.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

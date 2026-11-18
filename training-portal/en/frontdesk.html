@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瑞奇活力館 - 櫃台外籍員工中文發音練習系統 (Ricky Vitality Center - Front Desk Trainer)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ricky: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155',
+                            neonGreen: '#00ff66',
+                            neonCyan: '#00f3ff',
+                            neonPurple: '#b537f2',
+                            neonRed: '#ff0055',
+                            neonYellow: '#ffcc00'
+                        }
+                    },
+                    boxShadow: {
+                        'neon-green': '0 0 15px rgba(0, 255, 102, 0.4)',
+                        'neon-cyan': '0 0 15px rgba(0, 243, 255, 0.4)',
+                        'neon-purple': '0 0 15px rgba(181, 55, 242, 0.4)',
+                        'neon-red': '0 0 15px rgba(255, 0, 85, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ff66; }
+
+        @keyframes wave {
+            0%, 100% { height: 4px; }
+            50% { height: 26px; }
+        }
+        .animate-wave { animation: wave 1.2s infinite ease-in-out; }
+        .animation-delay-1 { animation-delay: 0.1s; }
+        .animation-delay-2 { animation-delay: 0.25s; }
+        .animation-delay-3 { animation-delay: 0.4s; }
+        .animation-delay-4 { animation-delay: 0.55s; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .animate-pulse-ring { animation: pulse-ring 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-ricky-neonGreen selection:text-black">
+
+    <!-- HEADER / NAVIGATION (BILINGUAL) -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+            <!-- Left Section: Home Button & Brand Logo -->
+            <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                <!-- Home Button -->
+                <button onclick="window.location.href='index.html'" class="px-3 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 hover:border-ricky-neonGreen text-xs font-bold text-slate-200 hover:text-ricky-neonGreen transition flex items-center space-x-1.5 shrink-0 shadow-sm">
+                    <span>🏠 返回首頁 / Home</span>
+                </button>
+
+                <!-- App Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('scenarios')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-ricky-neonGreen to-ricky-neonCyan flex items-center justify-center shadow-neon-green shrink-0">
+                        <i class="fa-solid fa-concierge-bell text-black text-xl font-bold"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-ricky-neonGreen via-white to-ricky-neonCyan">
+                            RICKY VITALITY CENTER
+                        </h1>
+                        <p class="text-[11px] text-slate-400 font-mono tracking-wide">瑞奇活力館 - 櫃台外籍員工中文應對發音系統 / Audio Trainer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs Menu (Bilingual Buttons) -->
+            <nav class="flex flex-wrap bg-slate-950/80 p-1 rounded-xl border border-slate-800 gap-1 w-full md:w-auto">
+                <button id="tab-btn-scenarios" onclick="switchTab('scenarios')" class="flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 bg-gradient-to-r from-ricky-neonGreen/20 to-ricky-neonCyan/20 text-ricky-neonGreen border border-ricky-neonGreen/40 shadow-neon-green">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>🛎️ 標準應對 / Scenarios</span>
+                </button>
+                <button id="tab-btn-vocab" onclick="switchTab('vocab')" class="flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>💡 核心詞彙 / Vocabulary</span>
+                </button>
+                <button id="tab-btn-roleplay" onclick="switchTab('roleplay')" class="flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    <span>🎭 情境模擬 / Role-Play</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ================= PAGE 1: FRONT DESK SCENARIOS ================= -->
+        <section id="page-scenarios" class="space-y-6">
+            <!-- Scenario Unit Selector Header -->
+            <div class="bg-ricky-card rounded-2xl p-5 border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="w-full md:w-auto flex-1">
+                    <label class="block text-xs text-ricky-neonGreen font-mono mb-1">
+                        🎯 選擇櫃台作業單元 / Select Front Desk Module:
+                    </label>
+                    <select id="scenario-selector" onchange="loadScenarioTarget(this.value)" class="w-full bg-slate-900 text-white font-medium rounded-xl border border-slate-700 px-4 py-2.5 text-sm focus:outline-none focus:border-ricky-neonGreen">
+                        <!-- Options populated dynamically -->
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
+                    <button onclick="navigateScenario(-1)" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-ricky-neonGreen text-xs md:text-sm font-semibold text-slate-300">
+                        <i class="fa-solid fa-chevron-left mr-1"></i>⬅️ 上一句 / Prev
+                    </button>
+                    <button onclick="navigateScenario(1)" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-ricky-neonGreen text-xs md:text-sm font-semibold text-slate-300">
+                        ➡️ 下一句 / Next<i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Practice Card: 3-Layer Display -->
+            <div class="bg-ricky-card rounded-2xl p-6 md:p-8 border border-slate-800 relative overflow-hidden shadow-2xl space-y-6">
+                <div class="flex justify-between items-center">
+                    <span id="current-unit-badge" class="text-xs font-mono px-3 py-1 rounded-full bg-slate-900 text-ricky-neonGreen border border-slate-700">
+                        單元 1：迎賓與登記
+                    </span>
+                    <span id="current-code-badge" class="text-xs font-bold px-3 py-1 rounded bg-ricky-neonCyan/20 text-ricky-neonCyan border border-ricky-neonCyan/40">
+                        MODULE #1
+                    </span>
+                </div>
+
+                <!-- Scenario Title -->
+                <div>
+                    <h3 id="target-title" class="text-2xl md:text-3xl font-black text-white">
+                        -- Loading Title --
+                    </h3>
+                    <p id="target-title-en" class="text-sm font-mono text-ricky-neonGreen mt-1">
+                        -- Loading English Title --
+                    </p>
+                </div>
+
+                <!-- 3-Layer Display Card -->
+                <div class="bg-slate-950/80 rounded-2xl p-6 border border-slate-800 space-y-4">
+                    <!-- Layer 1: Chinese Sentence -->
+                    <div>
+                        <div class="text-[11px] text-slate-400 font-mono mb-1">【第一層：標準櫃台對白 / Mandarin Dialogue】</div>
+                        <div id="display-chinese" class="text-xl md:text-2xl font-extrabold text-white tracking-wide leading-relaxed">
+                            -- 中文對白 --
+                        </div>
+                    </div>
+
+                    <!-- Layer 2: Pinyin Row -->
+                    <div class="pt-3 border-t border-slate-900">
+                        <div class="text-[11px] text-ricky-neonGreen font-mono mb-1">【第二層：漢語拼音 / Hanyu Pinyin】</div>
+                        <div id="display-pinyin" class="text-sm md:text-base font-mono text-ricky-neonGreen tracking-wider leading-relaxed">
+                            -- pinyin --
+                        </div>
+                    </div>
+
+                    <!-- Layer 3: English Translation -->
+                    <div class="pt-3 border-t border-slate-900">
+                        <div class="text-[11px] text-ricky-neonYellow font-mono mb-1">【第三層：英文對照翻譯 / English Translation】</div>
+                        <div id="display-english" class="text-sm md:text-base text-slate-300 italic leading-relaxed">
+                            -- English Translation --
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Micro Vocab Cards -->
+                <div class="space-y-2">
+                    <div class="text-xs text-slate-400 font-semibold flex items-center">
+                        <i class="fa-solid fa-key text-ricky-neonYellow mr-1.5"></i>
+                        <span>關鍵字詞卡 (點擊可發音) / Key Phrases (Tap to listen):</span>
+                    </div>
+                    <div id="keywords-container" class="flex flex-wrap gap-2">
+                        <!-- Dynamic keywords injected here -->
+                    </div>
+                </div>
+
+                <!-- Playback Control Buttons (Dual-Language) -->
+                <div class="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                        <!-- Standard Speed Button -->
+                        <button onclick="playTTS(1.0)" class="flex-1 sm:flex-none px-5 py-3 rounded-xl bg-gradient-to-r from-ricky-neonGreen to-emerald-600 text-black font-extrabold text-xs md:text-sm shadow-neon-green hover:opacity-95 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-volume-high text-base"></i>
+                            <span>🔊 播放範例 (1.0x) / Play Standard Audio</span>
+                        </button>
+                        <!-- Slow Speed Button (Adjusted rate to 0.5 for extra slow speed) -->
+                        <button onclick="playTTS(0.5)" class="flex-1 sm:flex-none px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-xs md:text-sm border border-slate-700 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-gauge-simple-low text-ricky-neonGreen"></i>
+                            <span>🐢 慢速播放 (0.5x) / Play Slow Audio</span>
+                        </button>
+                    </div>
+
+                    <!-- Audio Wave Indicator -->
+                    <div id="tts-wave" class="flex items-center space-x-1 h-8 opacity-30 transition-opacity duration-300">
+                        <div class="w-1.5 bg-ricky-neonGreen rounded-full animate-wave"></div>
+                        <div class="w-1.5 bg-ricky-neonGreen rounded-full animate-wave animation-delay-1"></div>
+                        <div class="w-1.5 bg-ricky-neonGreen rounded-full animate-wave animation-delay-2"></div>
+                        <div class="w-1.5 bg-ricky-neonGreen rounded-full animate-wave animation-delay-3"></div>
+                        <div class="w-1.5 bg-ricky-neonGreen rounded-full animate-wave animation-delay-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speech Assessment Panel -->
+            <div class="bg-ricky-card rounded-2xl p-6 md:p-8 border border-slate-800 shadow-2xl space-y-6">
+                <div>
+                    <h4 class="text-lg font-extrabold text-white flex items-center">
+                        <i class="fa-solid fa-headset text-ricky-neonCyan mr-2"></i>
+                        AI 實時口說發音評估 / Speech Assessment Engine
+                    </h4>
+                    <p class="text-xs text-slate-400 mt-1">按下錄音按鈕進行覆誦，系統將比對讀音並顯示發音熱力圖與分數</p>
+                </div>
+
+                <!-- Mic Interaction Box -->
+                <div class="flex flex-col items-center justify-center py-6 border border-dashed border-slate-800 rounded-2xl bg-slate-950/40">
+                    <div class="relative mb-3">
+                        <div id="mic-pulse-ring" class="hidden absolute -inset-4 rounded-full bg-ricky-neonRed/30 animate-pulse-ring"></div>
+                        <button id="mic-btn" onclick="toggleRecording()" class="relative z-10 w-24 h-24 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border-2 border-slate-600 flex flex-col items-center justify-center transition-all duration-300 shadow-lg group">
+                            <i id="mic-icon" class="fa-solid fa-microphone text-2xl mb-1"></i>
+                            <span id="mic-btn-label" class="text-[10px] font-mono tracking-tighter">REC</span>
+                        </button>
+                    </div>
+                    <p id="mic-status-text" class="text-xs md:text-sm font-bold text-slate-300 text-center">
+                        🎙️ 按住錄音 / 點擊開始錄音 (Press & Hold to Record)
+                    </p>
+                    <p id="speech-interim" class="text-xs text-ricky-neonGreen italic mt-2 min-h-[1.25rem] text-center"></p>
+                </div>
+
+                <!-- Pronunciation Heatmap Visual Feedback -->
+                <div class="space-y-2">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <span class="text-slate-400 font-semibold">發音熱力圖反饋 / Pronunciation Heatmap:</span>
+                        <div class="flex items-center space-x-3 font-mono text-[11px]">
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-ricky-neonGreen inline-block mr-1"></span>🟢 綠色：發音正確 / Green: Correct</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-ricky-neonRed inline-block mr-1"></span>🔴 紅色：需要調整 / Red: Needs Adjustment</span>
+                        </div>
+                    </div>
+                    <!-- Heatmap Output Container -->
+                    <div id="heatmap-result" class="min-h-[70px] bg-slate-950 rounded-xl p-4 border border-slate-800 flex flex-wrap gap-2 items-center">
+                        <span class="text-slate-500 text-xs italic">錄音結束後將在此視覺化顯示每個字之發音準確度...</span>
+                    </div>
+                </div>
+
+                <!-- Assessment Score Board -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <!-- Accuracy Card -->
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-mono">🎯 準確度 / Accuracy</p>
+                            <h5 id="score-accuracy" class="text-2xl font-black text-white mt-1">-- %</h5>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-ricky-neonGreen/10 text-ricky-neonGreen flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                    </div>
+
+                    <!-- Fluency Card -->
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-mono">🌊 流利度 / Fluency</p>
+                            <h5 id="score-fluency" class="text-2xl font-black text-white mt-1">-- %</h5>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-ricky-neonCyan/10 text-ricky-neonCyan flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-water"></i>
+                        </div>
+                    </div>
+
+                    <!-- Overall Score Card -->
+                    <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400 font-mono">💯 總評分 / Overall Score</p>
+                            <h5 id="score-overall" class="text-2xl font-black text-ricky-neonGreen mt-1">--</h5>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-ricky-neonGreen/10 text-ricky-neonGreen flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: KEY VOCABULARY ================= -->
+        <section id="page-vocab" class="hidden space-y-6">
+            <div class="bg-ricky-card rounded-2xl p-6 border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-book-bookmark text-ricky-neonYellow"></i>
+                        <span>💡 櫃台核心詞彙庫 / Key Front Desk Vocabulary</span>
+                    </h2>
+                    <p class="text-xs md:text-sm text-slate-400 mt-1">
+                        點擊任意單字卡可聆聽標準讀音，熟記櫃台必備名詞與說明詞彙
+                    </p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-mono bg-ricky-neonYellow/10 text-ricky-neonYellow border border-ricky-neonYellow/30 shrink-0">
+                    必備實用單字
+                </span>
+            </div>
+
+            <!-- Vocabulary Cards Grid -->
+            <div id="vocab-grid-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Javascript will inject vocabulary cards dynamically -->
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: ROLE-PLAY SIMULATION ================= -->
+        <section id="page-roleplay" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 via-ricky-card to-slate-900 rounded-2xl p-6 border border-slate-800">
+                <h3 class="text-2xl font-black text-white mb-1 flex items-center">
+                    <i class="fa-solid fa-user-astronaut text-ricky-neonCyan mr-3"></i>
+                    🎭 顧客應答情境模擬 / Front Desk Role-Play Simulation
+                </h3>
+                <p class="text-slate-400 text-xs md:text-sm">
+                    模擬顧客現場諮詢與提問。外籍員工點擊麥克風進行口說回答，系統將自動比對關鍵字與評分。
+                </p>
+            </div>
+
+            <!-- Roleplay Cards Container -->
+            <div id="roleplay-cards-container" class="space-y-6">
+                <!-- Javascript will inject roleplay scenarios -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-4 px-4 text-center text-xs text-slate-400">
+        <p>© 2026 瑞奇活力館 (Ricky Vitality Center) - 櫃台外籍員工中文發音練習系統 (Front Desk Chinese Trainer)</p>
+    </footer>
+
+    <!-- MESSAGE TOAST MODAL -->
+    <div id="toast-modal" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-5 py-3 rounded-xl border border-ricky-neonGreen shadow-neon-green flex items-center space-x-3">
+            <i id="toast-icon" class="fa-solid fa-circle-check text-ricky-neonGreen text-lg"></i>
+            <span id="toast-message" class="text-xs md:text-sm font-medium">提示訊息 / Notification</span>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC DATABASE & CONTROLLERS -->
+    <script>
+        /* ================= 1. FRONT DESK DATABASE (6 MODULES) ================= */
+        const SCENARIOS_DATA = [
+            // Module 1: Greeting & Registration
+            {
+                id: 'm1_1',
+                unit: '單元 1：迎賓與登記',
+                code: 'MODULE #1',
+                title: '迎賓問候與稱呼',
+                titleEn: 'Greeting & Visitor Name',
+                text: '早安，您好！請問先生或小姐，怎麼稱呼呢？',
+                pinyin: 'zǎo ān, nín hǎo! qǐng wèn xiān sheng huò xiǎo jiě, zěn me chēng hū ne?',
+                english: 'Good morning, hello! How may I address you, sir or ma\'am?',
+                keywords: [{zh:'早安', en:'Good morning'}, {zh:'先生', en:'Sir'}, {zh:'小姐', en:'Ma\'am'}, {zh:'稱呼', en:'Address as'}]
+            },
+            {
+                id: 'm1_2',
+                unit: '單元 1：迎賓與登記',
+                code: 'MODULE #1',
+                title: '確認住宿房號',
+                titleEn: 'Room Number Check',
+                text: '請問先生或小姐，您的房號，是幾號呢？',
+                pinyin: 'qǐng wèn xiān sheng huò xiǎo jiě, nín de fáng hào, shì jǐ hào ne?',
+                english: 'May I ask your room number, sir or ma\'am?',
+                keywords: [{zh:'房號', en:'Room number'}, {zh:'幾號', en:'Which number'}]
+            },
+            {
+                id: 'm1_3',
+                unit: '單元 1：迎賓與登記',
+                code: 'MODULE #1',
+                title: '確認使用人數與設施',
+                titleEn: 'Guest Count & Facility Intent',
+                text: '總共是兩位大人，和一位小朋友，請問今天，想要使用什麼設施呢？',
+                pinyin: 'zǒng gòng shì liǎng wèi dà rén, hé yī wèi xiǎo péng yǒu, qǐng wèn jīn tiān, xiǎng yào shǐ yòng shén me shè shī ne?',
+                english: 'That\'s two adults and one child in total. Which facility would you like to use today?',
+                keywords: [{zh:'大人', en:'Adults'}, {zh:'小朋友', en:'Children'}, {zh:'設施', en:'Facility'}]
+            },
+
+            // Module 2: Pool Services & FAQ
+            {
+                id: 'm2_1',
+                unit: '單元 2：泳池服務與問答',
+                code: 'MODULE #2',
+                title: '泳衣與泳帽確認',
+                titleEn: 'Swimwear & Swim Cap Check',
+                text: '請問泳衣和泳帽，都有帶到嗎？入場，需要配戴泳帽喔！',
+                pinyin: 'qǐng wèn yǒng yī hé yǒng mào, dōu yǒu dài dào ma? rù chǎng, xū yào pèi dài yǒng mào ō!',
+                english: 'Do you have your swimwear and swimming caps with you? Swimming caps are required for entry!',
+                keywords: [{zh:'泳衣', en:'Swimwear'}, {zh:'泳帽', en:'Swimming cap'}, {zh:'配戴', en:'Wear'}]
+            },
+            {
+                id: 'm2_2',
+                unit: '單元 2：泳池服務與問答',
+                code: 'MODULE #2',
+                title: '幼童防水尿布確認',
+                titleEn: 'Waterproof Diaper Check',
+                text: '請問小朋友，還在包尿布嗎？入場，需要穿著防水尿布喔！',
+                pinyin: 'qǐng wèn xiǎo péng yǒu, hái zài bāo niào bù ma? rù chǎng, xū yào chuān zhuó fáng shuǐ niào bù ō!',
+                english: 'Is the little one still wearing diapers? Waterproof swim diapers are required inside!',
+                keywords: [{zh:'包尿布', en:'Wearing diapers'}, {zh:'防水尿布', en:'Waterproof diaper'}]
+            },
+            {
+                id: 'm2_3',
+                unit: '單元 2：泳池服務與問答',
+                code: 'MODULE #2',
+                title: '毛巾發放與置物櫃鎖匙',
+                titleEn: 'Towels & Locker Keys',
+                text: '這邊提供您兩條毛巾，置物櫃鑰匙給您，男生一號、女生二號。',
+                pinyin: 'zhè biān tí gōng nín liǎng tiáo máo jīn, zhì wù guì yào shi gěi nín, nán shēng yī hào, nǚ shēng èr hào.',
+                english: 'Here are two towels for you. Locker keys: Male No. 1, Female No. 2.',
+                keywords: [{zh:'毛巾', en:'Towel'}, {zh:'置物櫃鑰匙', en:'Locker key'}, {zh:'男生', en:'Male'}, {zh:'女生', en:'Female'}]
+            },
+            {
+                id: 'm2_4',
+                unit: '單元 2：泳池服務與問答',
+                code: 'MODULE #2',
+                title: '更衣室與鞋櫃引導',
+                titleEn: 'Changing Room & Shoes Guidance',
+                text: '後方有鞋櫃，更衣室男左女右，請先幫我脫鞋子，再進入喔！',
+                pinyin: 'hòu fāng yǒu xié guì, gēng yī shì nán zuǒ nǚ yòu, qǐng xiān bāng wǒ tuō xié zi, zài jìn rù ō!',
+                english: 'Shoes rack is behind you. Changing rooms are male on the left, female on the right. Please remove shoes first!',
+                keywords: [{zh:'鞋櫃', en:'Shoe rack'}, {zh:'更衣室', en:'Changing room'}, {zh:'脫鞋子', en:'Remove shoes'}]
+            },
+            {
+                id: 'm2_5',
+                unit: '單元 2：泳池服務與問答',
+                code: 'MODULE #2',
+                title: '充氣機使用注意事項',
+                titleEn: 'Electric Air Pump Notice',
+                text: '打氣機在室內泳池入口右手邊，提醒您，輕壓充氣即可，避免破裂喔！',
+                pinyin: 'dǎ qì jī zài shì nèi yǒng chí rù kǒu yòu shǒu biān, tí xǐng nín, qīng yā chōng qì jí kě, bì miǎn pò liè ō!',
+                english: 'The air pump is on the right of the indoor pool entrance. Please press gently to prevent popping.',
+                keywords: [{zh:'打氣機', en:'Air pump'}, {zh:'輕壓充氣', en:'Press gently'}, {zh:'避免破裂', en:'Avoid popping'}]
+            },
+            {
+                id: 'm2_6',
+                unit: '單元 2：泳池服務與問答',
+                code: 'MODULE #2',
+                title: '浮具與浮板借用說明',
+                titleEn: 'Swim Floats & Kickboard Rules',
+                text: '我們沒有提供泳圈租借，您可以向救生員借用浮板，或是，在櫃台購買泳具。',
+                pinyin: 'wǒ men méi yǒu tí gōng yǒng quān zū jiè, nín kě yǐ xiàng jiù shēng yuán jiè yòng fú bǎn, huò shì, zài guì tái gòu mǎi yǒng jù.',
+                english: 'We don\'t rent swim rings, but you can borrow kickboards from the lifeguard or purchase floats here.',
+                keywords: [{zh:'泳圈', en:'Swim ring'}, {zh:'救生員', en:'Lifeguard'}, {zh:'浮板', en:'Kickboard'}]
+            },
+
+            // Module 3: Kids Playroom
+            {
+                id: 'm3_1',
+                unit: '單元 3：兒童遊戲室',
+                code: 'MODULE #3',
+                title: '襪子穿著規定',
+                titleEn: 'Socks Requirement',
+                text: '進入遊戲室與休息區，大人和小孩，都必須穿著襪子喔！',
+                pinyin: 'jìn rù yóu xì shì hé xiū xi qū, dà rén hé xiǎo hái, dōu bì xū chuān zhuó wà zi ō!',
+                english: 'Everyone must wear socks inside the playroom and lounge area!',
+                keywords: [{zh:'遊戲室', en:'Playroom'}, {zh:'休息區', en:'Lounge area'}, {zh:'襪子', en:'Socks'}]
+            },
+            {
+                id: 'm3_2',
+                unit: '單元 3：兒童遊戲室',
+                code: 'MODULE #3',
+                title: '購買現場襪子',
+                titleEn: 'Sock Purchase Option',
+                text: '如果沒有帶襪子，可以回房間拿，或是櫃台有販售，一雙是六十元。',
+                pinyin: 'rú guǒ méi yǒu dài wà zi, kě yǐ huí fáng jiān ná, huò shì guì tái yǒu fàn shòu, yī shuāng shì liù shí yuán.',
+                english: 'If you didn\'t bring socks, you can retrieve them from your room or buy them here for 60 NTD per pair.',
+                keywords: [{zh:'販售', en:'For sale'}, {zh:'一雙', en:'One pair'}, {zh:'60元', en:'60 NTD'}]
+            },
+
+            // Module 4: Gym Check-in
+            {
+                id: 'm4_1',
+                unit: '單元 4：健身房登記',
+                code: 'MODULE #4',
+                title: '健身房年齡限制',
+                titleEn: 'Gym Age Requirement',
+                text: '使用健身房，需要年滿十六歲以上，才能進入喔！',
+                pinyin: 'shǐ yòng jiàn shēn fáng, xū yào nián mǎn shí liù suì yǐ shàng, cái néng jìn rù ō!',
+                english: 'You must be at least 16 years old to enter the gym!',
+                keywords: [{zh:'健身房', en:'Gym'}, {zh:'年滿16歲', en:'At least 16 years old'}]
+            },
+            {
+                id: 'm4_2',
+                unit: '單元 4：健身房登記',
+                code: 'MODULE #4',
+                title: '運動鞋與感應磁扣',
+                titleEn: 'Sports Shoes & Sensor Fob',
+                text: '請確認有穿著運動鞋。這是門禁磁扣，毛巾使用完，請丟入鐵籃。',
+                pinyin: 'qǐng què rèn yǒu chuān zhuó yùn dòng xié. zhè shì mén jìn cí kòu, máo jīn shǐ yòng wán, qǐng diū rù tiě lán.',
+                english: 'Please ensure you are wearing sports shoes. Here is the sensor fob. Put used towels in the metal basket.',
+                keywords: [{zh:'運動鞋', en:'Sports shoes'}, {zh:'磁扣', en:'Sensor fob'}, {zh:'鐵籃', en:'Metal basket'}]
+            },
+
+            // Module 5: Ocean World Facilities
+            {
+                id: 'm5_1',
+                unit: '單元 5：海底世界設施預約',
+                code: 'MODULE #5',
+                title: '設施預約與時間限制',
+                titleEn: 'Facility Reservation Rules',
+                text: '設施有桌球、撞球、手足球與 Switch，一間房號，一次預約三十分鐘。',
+                pinyin: 'shè shī yǒu zhuō qiú, zhuàng qiú, shǒu zú qiú yǔ Switch, yī jiān fáng hào, yī cì yù yuē sān shí fēn zhōng.',
+                english: 'Facilities include table tennis, pool, foosball, and Switch. Each room can reserve 1 activity per 30-min slot.',
+                keywords: [{zh:'桌球', en:'Table tennis'}, {zh:'撞球', en:'Pool'}, {zh:'手足球', en:'Foosball'}, {zh:'30分鐘', en:'30 mins'}]
+            },
+
+            // Module 6: Board Game Rental & Return
+            {
+                id: 'm6_1',
+                unit: '單元 6：桌遊租借與歸還',
+                code: 'MODULE #6',
+                title: '桌遊租借與押金說明',
+                titleEn: 'Board Game Rental & Deposit',
+                text: '桌遊可以帶回房間玩，每組押金一千元，請於退房當天，上午十一點前歸還。',
+                pinyin: 'zhuō yóu kě yǐ dài huí fáng jiān wán, měi zǔ yā jīn yī qiān yuán, qǐng yú tuì fáng dàng tiān, shàng wǔ shí yī diǎn qián guī huán.',
+                english: 'Board games can be taken to your room. Deposit is 1,000 NTD per set, return before 11:00 AM on checkout day.',
+                keywords: [{zh:'桌遊', en:'Board game'}, {zh:'押金', en:'Deposit'}, {zh:'一千元', en:'1,000 NTD'}, {zh:'歸還', en:'Return'}]
+            },
+            {
+                id: 'm6_2',
+                unit: '單元 6：桌遊租借與歸還',
+                code: 'MODULE #6',
+                title: '桌遊歸還與退還押金',
+                titleEn: 'Game Return & Refund',
+                text: '幫您確認桌遊配件齊全，這邊退還您押金一千元，謝謝您！',
+                pinyin: 'bāng nín què rèn zhuō yóu pèi jiàn qí quán, zhè biān tuì huán nín yā jīn yī qiān yuán, xiè xie nín!',
+                english: 'All game pieces are accounted for. Here is your 1,000 NTD deposit back. Thank you!',
+                keywords: [{zh:'配件齊全', en:'All pieces complete'}, {zh:'退還押金', en:'Refund deposit'}]
+            }
+        ];
+
+        /* ================= 2. VOCABULARY DATABASE ================= */
+        const VOCAB_DATA = [
+            { zh: '房號', pinyin: 'fáng hào', en: 'Room Number', category: '接待' },
+            { zh: '押金', pinyin: 'yā jīn', en: 'Deposit', category: '費用' },
+            { zh: '磁扣', pinyin: 'cí kòu', en: 'Sensor Fob', category: '設施' },
+            { zh: '防水尿布', pinyin: 'fáng shuǐ niào bù', en: 'Waterproof Diaper', category: '泳池' },
+            { zh: '泳帽', pinyin: 'yǒng mào', en: 'Swim Cap', category: '泳池' },
+            { zh: '浮板', pinyin: 'fú bǎn', en: 'Kickboard', category: '泳池' },
+            { zh: '打氣機', pinyin: 'dǎ qì jī', en: 'Electric Air Pump', category: '泳池' },
+            { zh: '更衣室', pinyin: 'gēng yī shì', en: 'Changing Room', category: '設施' },
+            { zh: '置物櫃', pinyin: 'zhì wù guì', en: 'Locker', category: '設施' },
+            { zh: '運動鞋', pinyin: 'yùn dòng xié', en: 'Sports Shoes', category: '健身房' },
+            { zh: '襪子', pinyin: 'wà zi', en: 'Socks', category: '遊戲室' },
+            { zh: '桌遊', pinyin: 'zhuō yóu', en: 'Board Game', category: '娛樂' },
+            { zh: '撞球', pinyin: 'zhuàng qiú', en: 'Pool / Billiards', category: '娛樂' },
+            { zh: '救生員', pinyin: 'jiù shēng yuán', en: 'Lifeguard', category: '人員' }
+        ];
+
+        /* ================= 3. ROLE-PLAY SCENARIOS ================= */
+        const ROLEPLAY_DATA = [
+            {
+                id: 'rp1',
+                q: '請問小朋友沒有帶游泳帽子可以進去游泳池嗎？',
+                qEn: 'Can my child go into the pool without a swim cap?',
+                answer: '先生/小姐您好，泳池規定必須配戴泳帽才能入場喔！現場櫃台有販售泳帽。',
+                answerEn: 'Hello! Swimming caps are required for pool entry. Swim caps are available for purchase here.',
+                keywords: ['泳帽', '配戴', '入場']
+            },
+            {
+                id: 'rp2',
+                q: '請問一下，健身房可以穿涼鞋進去運動嗎？',
+                qEn: 'Can I enter the gym wearing sandals?',
+                answer: '不好意思，健身房規定必須穿著運動鞋才能進入運動喔！',
+                answerEn: 'Sorry, sports shoes are strictly required to enter the gym!',
+                keywords: ['運動鞋', '健身房']
+            },
+            {
+                id: 'rp3',
+                q: '請問借一組桌遊帶回房間玩，需要多少押金呢？',
+                qEn: 'How much is the deposit to take a board game to our room?',
+                answer: '桌遊押金為一千元，請於退房當天上午十一點前歸還喔！',
+                answerEn: 'The board game deposit is 1,000 NTD. Please return it before 11:00 AM on checkout day!',
+                keywords: ['一千元', '押金', '十一點']
+            }
+        ];
+
+        /* ================= 4. GLOBAL APP STATE ================= */
+        let currentTab = 'scenarios';
+        let currentTarget = SCENARIOS_DATA[0];
+        let isRecording = false;
+        let recognition = null;
+
+        /* ================= 5. INITIALIZATION ================= */
+        window.onload = function() {
+            populateScenarioSelector();
+            renderVocabGrid();
+            renderRoleplayScenarios();
+            loadScenarioTarget(SCENARIOS_DATA[0].id);
+            initWebSpeech();
+        };
+
+        /* ================= 6. TAB NAVIGATION ================= */
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = "flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 text-slate-400 hover:text-white";
+            });
+
+            document.getElementById(`tab-btn-${tab}`).className = "flex-1 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center space-x-1.5 bg-gradient-to-r from-ricky-neonGreen/20 to-ricky-neonCyan/20 text-ricky-neonGreen border border-ricky-neonGreen/40 shadow-neon-green";
+
+            document.getElementById('page-scenarios').classList.add('hidden');
+            document.getElementById('page-vocab').classList.add('hidden');
+            document.getElementById('page-roleplay').classList.add('hidden');
+
+            document.getElementById(`page-${tab}`).classList.remove('hidden');
+        }
+
+        /* ================= 7. RENDER FUNCTIONS ================= */
+        function populateScenarioSelector() {
+            const select = document.getElementById('scenario-selector');
+            let html = '';
+            let currentGroup = '';
+
+            SCENARIOS_DATA.forEach(s => {
+                if (s.unit !== currentGroup) {
+                    if (currentGroup !== '') html += '</optgroup>';
+                    currentGroup = s.unit;
+                    html += `<optgroup label="--- ${s.unit} ---">`;
+                }
+                html += `<option value="${s.id}">${s.title} (${s.titleEn})</option>`;
+            });
+            html += '</optgroup>';
+            select.innerHTML = html;
+        }
+
+        function renderVocabGrid() {
+            const container = document.getElementById('vocab-grid-container');
+            container.innerHTML = VOCAB_DATA.map(v => `
+                <div onclick="playCustomTTS('${v.zh}')" class="bg-ricky-card hover:bg-slate-900/90 rounded-2xl p-4 border border-slate-800 hover:border-ricky-neonGreen/50 transition duration-300 cursor-pointer flex flex-col justify-between space-y-3 group">
+                    <div class="flex justify-between items-start">
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-ricky-neonGreen border border-ricky-neonGreen/30">
+                            ${v.category}
+                        </span>
+                        <i class="fa-solid fa-volume-high text-slate-500 group-hover:text-ricky-neonGreen text-xs transition"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-white group-hover:text-ricky-neonGreen transition-colors">${v.zh}</h4>
+                        <p class="text-xs font-mono text-ricky-neonGreen mt-0.5">${v.pinyin}</p>
+                        <p class="text-xs text-slate-400 italic mt-1">${v.en}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRoleplayScenarios() {
+            const container = document.getElementById('roleplay-cards-container');
+            container.innerHTML = ROLEPLAY_DATA.map((rp, idx) => `
+                <div class="bg-ricky-card rounded-2xl p-6 border border-slate-800 space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-ricky-neonCyan/20 text-ricky-neonCyan border border-ricky-neonCyan/40 flex items-center justify-center font-bold shrink-0">
+                            <i class="fa-solid fa-user-circle"></i>
+                        </div>
+                        <div class="bg-slate-950/90 rounded-2xl rounded-tl-none p-4 border border-slate-800 flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs text-ricky-neonCyan font-mono">顧客提問 #${idx + 1} / Guest Query</span>
+                                <button onclick="playCustomTTS('${rp.q}')" class="text-xs text-slate-400 hover:text-ricky-neonGreen">
+                                    <i class="fa-solid fa-volume-high mr-1"></i>聽顧客提問
+                                </button>
+                            </div>
+                            <p class="text-sm md:text-base font-semibold text-white">"${rp.q}"</p>
+                            <p class="text-xs text-slate-400 italic mt-0.5">"${rp.qEn}"</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 text-xs space-y-1">
+                        <span class="text-ricky-neonGreen font-bold">💡 【櫃台標準中文回答】:</span>
+                        <p class="text-sm font-medium text-slate-200">${rp.answer}</p>
+                        <p class="text-xs text-slate-400 italic">${rp.answerEn}</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                        <button onclick="startRoleplaySpeech('${rp.id}')" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-ricky-neonGreen to-teal-600 text-black font-extrabold text-xs md:text-sm shadow-neon-green hover:opacity-90 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-microphone"></i>
+                            <span>🎙️ 語音回答 / Speak Answer</span>
+                        </button>
+                        <div id="rp-result-${rp.id}" class="text-xs font-mono text-slate-400 italic flex-1">
+                            尚未回答 / Not answered
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* ================= 8. SCENARIO PRACTICE CONTROLLER ================= */
+        function loadScenarioTarget(id) {
+            const found = SCENARIOS_DATA.find(s => s.id === id);
+            if (!found) return;
+
+            currentTarget = found;
+
+            document.getElementById('target-title').innerText = found.title;
+            document.getElementById('target-title-en').innerText = found.titleEn;
+            
+            document.getElementById('display-chinese').innerText = found.text;
+            document.getElementById('display-pinyin').innerText = found.pinyin;
+            document.getElementById('display-english').innerText = found.english;
+
+            document.getElementById('current-unit-badge').innerText = found.unit;
+            document.getElementById('current-code-badge').innerText = found.code;
+
+            // Keyword Cards
+            const kwContainer = document.getElementById('keywords-container');
+            kwContainer.innerHTML = found.keywords.map(kw => `
+                <button onclick="playCustomTTS('${kw.zh}')" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-ricky-neonGreen text-xs font-semibold text-slate-200 hover:text-ricky-neonGreen transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-volume-low text-ricky-neonGreen text-[10px]"></i>
+                    <span class="text-white">${kw.zh}</span>
+                    <span class="text-[10px] text-slate-400 font-mono">(${kw.en})</span>
+                </button>
+            `).join('');
+
+            // Reset evaluation panel
+            document.getElementById('heatmap-result').innerHTML = `<span class="text-slate-500 text-xs italic">🎙️ 按住錄音鈕覆誦中文對白...</span>`;
+            document.getElementById('score-accuracy').innerText = '-- %';
+            document.getElementById('score-fluency').innerText = '-- %';
+            document.getElementById('score-overall').innerText = '--';
+        }
+
+        function navigateScenario(direction) {
+            const currentIndex = SCENARIOS_DATA.findIndex(item => item.id === currentTarget.id);
+            let nextIndex = currentIndex + direction;
+            if (nextIndex < 0) nextIndex = SCENARIOS_DATA.length - 1;
+            if (nextIndex >= SCENARIOS_DATA.length) nextIndex = 0;
+            
+            const nextId = SCENARIOS_DATA[nextIndex].id;
+            document.getElementById('scenario-selector').value = nextId;
+            loadScenarioTarget(nextId);
+        }
+
+        /* ================= 9. TTS VOICE PLAYBACK ================= */
+        // Helper: Select the most natural Traditional Chinese Voice
+        function getBestTaiwanVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return null;
+
+            // Preferred voice names in order of naturalness
+            const preferredVoices = [
+                'Microsoft Yating',
+                'Microsoft Hanhan',
+                'Mei-Jia',
+                'Ting-Ting',
+                'Hsiao-Chen',
+                'Google 臺灣中文',
+                'zh-TW'
+            ];
+
+            for (const name of preferredVoices) {
+                const match = voices.find(v => v.name.includes(name) || (v.lang === 'zh-TW' && v.name.includes(name)));
+                if (match) return match;
+            }
+
+            // Fallback to any zh-TW voice, or any Chinese voice
+            return voices.find(v => v.lang === 'zh-TW' || v.lang.startsWith('zh')) || null;
+        }
+
+        // Pre-load voices on browser ready
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                getBestTaiwanVoice();
+            };
+        }
+
+        function playTTS(rate = 1.0) {
+            if (!('speechSynthesis' in window)) {
+                showToast('您的瀏覽器不支援語音合成 / SpeechSynthesis not supported', 'error');
+                return;
+            }
+
+            // 1. 務必先執行 cancel() 清除先前所有播放佇列與舊語速設定
+            window.speechSynthesis.cancel();
+
+            const text = currentTarget.text;
+            const u = new SpeechSynthesisUtterance(text);
+            
+            // Apply Voice Optimization
+            const bestVoice = getBestTaiwanVoice();
+            if (bestVoice) {
+                u.voice = bestVoice;
+                u.lang = bestVoice.lang;
+            } else {
+                u.lang = 'zh-TW';
+            }
+
+            // Fine-tune tone
+            u.pitch = 1.05; // Slightly elevated pitch for friendly counter service tone
+
+            // 2. 精準設定語速 (當 rate <= 0.6 時直接使用指定慢速，確保慢速效果顯著)
+            if (rate <= 0.6) {
+                u.rate = rate; // 0.5x 非常清晰顯著的慢速
+            } else {
+                u.rate = rate * 0.95; // 標準語速略加微調
+            }
+
+            const wave = document.getElementById('tts-wave');
+            u.onstart = () => wave.classList.remove('opacity-30');
+            u.onend = () => wave.classList.add('opacity-30');
+            u.onerror = () => wave.classList.add('opacity-30');
+
+            // 3. 呼叫 speak 開始播放
+            window.speechSynthesis.speak(u);
+        }
+
+        function playCustomTTS(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            
+            const bestVoice = getBestTaiwanVoice();
+            if (bestVoice) {
+                u.voice = bestVoice;
+                u.lang = bestVoice.lang;
+            } else {
+                u.lang = 'zh-TW';
+            }
+
+            u.pitch = 1.05;
+            u.rate = 0.9;
+            window.speechSynthesis.speak(u);
+        }
+
+        /* ================= 10. STT & SPEECH ASSESSMENT ================= */
+        function initWebSpeech() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'zh-TW';
+
+            recognition.onstart = () => {
+                isRecording = true;
+                updateMicUI(true);
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                let finalStr = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalStr += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+
+                document.getElementById('speech-interim').innerText = interim || finalStr;
+                if (finalStr) {
+                    evaluateSpeech(finalStr, currentTarget.text);
+                }
+            };
+
+            recognition.onerror = (event) => {
+                isRecording = false;
+                updateMicUI(false);
+                showToast('錄音識別出錯 / Speech Error: ' + event.error, 'error');
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                updateMicUI(false);
+            };
+        }
+
+        function toggleRecording() {
+            if (!recognition) {
+                showToast('請使用 Chrome/Edge 體驗語音識別 / Using mock simulation', 'info');
+                simulateMockAssessment();
+                return;
+            }
+
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                document.getElementById('speech-interim').innerText = 'Listening... 請覆誦句子';
+                recognition.start();
+            }
+        }
+
+        function updateMicUI(recording) {
+            const btn = document.getElementById('mic-btn');
+            const icon = document.getElementById('mic-icon');
+            const ring = document.getElementById('mic-pulse-ring');
+            const status = document.getElementById('mic-status-text');
+            const label = document.getElementById('mic-btn-label');
+
+            if (recording) {
+                btn.className = "relative z-10 w-24 h-24 rounded-full bg-ricky-neonRed text-white border-2 border-white flex flex-col items-center justify-center transition-all duration-300 shadow-neon-red scale-105";
+                icon.className = "fa-solid fa-stop text-2xl mb-1";
+                label.innerText = "STOP";
+                ring.classList.remove('hidden');
+                status.innerText = "🎙️ 錄音中...點擊結束 / Recording... Tap to stop";
+                status.className = "text-xs md:text-sm font-bold text-ricky-neonRed text-center";
+            } else {
+                btn.className = "relative z-10 w-24 h-24 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border-2 border-slate-600 flex flex-col items-center justify-center transition-all duration-300 shadow-lg group";
+                icon.className = "fa-solid fa-microphone text-2xl mb-1";
+                label.innerText = "REC";
+                ring.classList.add('hidden');
+                status.innerText = "🎙️ 按住錄音 / 點擊開始 (Press & Hold to Record)";
+                status.className = "text-xs md:text-sm font-bold text-slate-300 text-center";
+            }
+        }
+
+        /* ================= 11. AI HEATMAP & SCORING ================= */
+        function evaluateSpeech(userText, targetText) {
+            const targetChars = targetText.replace(/[^\u4e00-\u9fa5]/g, '').split('');
+            const userChars = userText.replace(/[^\u4e00-\u9fa5]/g, '').split('');
+
+            let correctCount = 0;
+            const heatmapContainer = document.getElementById('heatmap-result');
+            heatmapContainer.innerHTML = '';
+
+            targetChars.forEach((char) => {
+                const button = document.createElement('button');
+                button.onclick = () => playCustomTTS(char);
+                button.className = "px-2 py-1 rounded text-sm md:text-base font-bold transition-transform hover:scale-110 flex items-center space-x-1 cursor-pointer ";
+
+                if (userChars.includes(char)) {
+                    correctCount++;
+                    button.className += "bg-ricky-neonGreen/20 text-ricky-neonGreen border border-ricky-neonGreen/40";
+                    button.title = "發音正確 (Correct)";
+                } else {
+                    button.className += "bg-ricky-neonRed/20 text-ricky-neonRed border border-ricky-neonRed/40 animate-pulse";
+                    button.title = "發音需要調整，點擊單獨聽發音 (Needs Adjustment - Tap to Listen)";
+                }
+                button.innerHTML = `<span>${char}</span>`;
+                heatmapContainer.appendChild(button);
+            });
+
+            const total = targetChars.length || 1;
+            const accuracy = Math.round((correctCount / total) * 100);
+            const fluency = userChars.length > 0 ? Math.min(100, Math.round((userChars.length / total) * 95)) : 50;
+            const overall = Math.round((accuracy * 0.7) + (fluency * 0.3));
+
+            document.getElementById('score-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('score-fluency').innerText = `${fluency}%`;
+            document.getElementById('score-overall').innerText = `${overall}`;
+
+            showToast('AI 發音評估完成！/ Assessment Complete!', 'success');
+        }
+
+        function simulateMockAssessment() {
+            showToast('模擬錄音中... / Simulating speech assessment', 'info');
+            setTimeout(() => {
+                evaluateSpeech(currentTarget.text.slice(0, Math.floor(currentTarget.text.length * 0.9)), currentTarget.text);
+            }, 1200);
+        }
+
+        /* ================= 12. ROLE-PLAY CHALLENGE ================= */
+        function startRoleplaySpeech(rpId) {
+            const rp = ROLEPLAY_DATA.find(item => item.id === rpId);
+            const resEl = document.getElementById(`rp-result-${rpId}`);
+            
+            if (!recognition) {
+                resEl.innerHTML = `<span class="text-ricky-neonGreen font-bold"><i class="fa-solid fa-check-circle mr-1"></i>回答符合標準規範 (Score: 92)</span>`;
+                playCustomTTS("很好！應對非常標準。");
+                return;
+            }
+
+            resEl.innerText = 'Listening... 請說出中文回答';
+            recognition.start();
+
+            recognition.onresult = (e) => {
+                const userSpeech = e.results[0][0].transcript;
+                let matched = 0;
+                rp.keywords.forEach(kw => {
+                    if (userSpeech.includes(kw)) matched++;
+                });
+
+                if (matched >= 1) {
+                    resEl.innerHTML = `<span class="text-ricky-neonGreen font-bold"><i class="fa-solid fa-circle-check mr-1"></i>"<sup>${userSpeech}</sup>" (回答符合櫃台規範)</span>`;
+                } else {
+                    resEl.innerHTML = `<span class="text-ricky-neonYellow font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>"<sup>${userSpeech}</sup>" (建議包含核心詞彙)</span>`;
+                }
+            };
+        }
+
+        /* ================= 13. TOAST NOTIFICATION ================= */
+        function showToast(msg, type = 'info') {
+            const modal = document.getElementById('toast-modal');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.innerText = msg;
+            if (type === 'error') {
+                iconEl.className = "fa-solid fa-circle-xmark text-ricky-neonRed text-lg";
+            } else if (type === 'success') {
+                iconEl.className = "fa-solid fa-circle-check text-ricky-neonGreen text-lg";
+            } else {
+                iconEl.className = "fa-solid fa-circle-info text-ricky-neonCyan text-lg";
+            }
+
+            modal.classList.remove('translate-y-20', 'opacity-0');
+            modal.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                modal.classList.remove('translate-y-0', 'opacity-100');
+                modal.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
