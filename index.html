@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運動指導科 員工培訓與報到系統 | Sports Instruction Dept. Training & Onboarding Portal</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#0f172a] text-slate-100 min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-teal-500 selection:text-white">
+
+    <!-- 背景科技光暈與網格裝飾 (Ambient Tech Background) -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <!-- 琥珀色環境光暈 (左側呼應) -->
+        <div class="absolute top-1/4 -left-24 w-80 h-80 sm:w-[30rem] sm:h-[30rem] bg-amber-500/15 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <!-- 青綠色環境光暈 (右側呼應) -->
+        <div class="absolute bottom-1/4 -right-24 w-80 h-80 sm:w-[32rem] sm:h-[32rem] bg-teal-500/15 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <!-- 科技網格背景紋理 -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_80%_75%_at_50%_50%,#000_65%,transparent_100%)] opacity-40"></div>
+    </div>
+
+    <!-- 頂部部門識別列 (Top Header Bar) -->
+    <header class="relative z-10 w-full border-b border-slate-800/80 bg-[#0f172a]/80 backdrop-blur-md">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- 部門 Logo 與名稱 -->
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 via-teal-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
+                    <i class="fa-solid fa-person-running text-slate-950 text-base"></i>
+                </div>
+                <div class="leading-tight">
+                    <span class="block text-xs sm:text-sm font-bold tracking-wider text-teal-400 uppercase">Sports Instruction Dept.</span>
+                    <span class="block text-[11px] text-slate-400">運動指導科 | 全站系統入口 Gateway</span>
+                </div>
+            </div>
+
+            <!-- 系統狀態指示 -->
+            <div class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/80 px-3 py-1.5 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span class="text-xs font-medium text-slate-200">Select Language / 選擇語言</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 中央置中主內容區塊 (Centered Main Gateway Area) -->
+    <main class="relative z-10 flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div class="w-full max-w-5xl mx-auto">
+            
+            <!-- ========================================================== -->
+            <!-- 1. 中央歡迎標題區 (Welcome Header Section)                 -->
+            <!-- ========================================================== -->
+            <section class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+                <!-- 歡迎徽章 -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/90 text-xs sm:text-sm font-medium text-amber-300 mb-6 shadow-md">
+                    <i class="fa-solid fa-shield-halved text-teal-400"></i>
+                    <span>歡迎加入運動指導科 / Welcome to Sports Instruction Dept.</span>
+                </div>
+
+                <!-- 部門與系統主標題 -->
+                <h1 class="text-2xl sm:text-4xl lg:text-[2.7rem] font-black tracking-tight text-white leading-snug">
+                    <span class="block bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-white to-teal-200">
+                        運動指導科 員工培訓與報到系統
+                    </span>
+                    <span class="block text-base sm:text-xl lg:text-2xl font-bold text-teal-400 mt-2 tracking-normal">
+                        Sports Instruction Dept. Training & Onboarding Portal
+                    </span>
+                </h1>
+
+                <!-- 提示語 -->
+                <div class="mt-5 space-y-1.5">
+                    <p class="text-base sm:text-lg text-slate-200 font-semibold">
+                        請選擇您的語言與身分以進入專屬培訓空間
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-400 tracking-wide">
+                        Please select your language & track to enter
+                    </p>
+                </div>
+            </section>
+
+            <!-- ========================================================== -->
+            <!-- 2. 兩張大型入口選擇卡片 (雙欄並排 / 手機上下排列)           -->
+            <!-- ========================================================== -->
+            <section aria-label="語言與身分入口選擇" class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                
+                <!-- ------------------------------------------------------ -->
+                <!-- 左側卡片：台灣籍同仁專區 (琥珀金色科技光暈 -> tw/home.html) -->
+                <!-- ------------------------------------------------------ -->
+                <a href="tw/home.html"
+                   class="group relative block rounded-3xl p-[2px] bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600/70 shadow-xl shadow-amber-950/30 hover:shadow-2xl hover:shadow-amber-500/35 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-amber-400/50">
+                    
+                    <!-- 卡片外部懸停發光層 -->
+                    <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <div class="relative h-full bg-[#0f172a]/95 group-hover:bg-[#171c2e] rounded-[22px] p-7 sm:p-9 flex flex-col justify-between transition-colors duration-300 overflow-hidden">
+                        <!-- 內部右上裝飾光球 -->
+                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-400/25 transition-all duration-500"></div>
+
+                        <div>
+                            <!-- 圖示與身分標籤列 -->
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-400/40 flex items-center justify-center shadow-inner group-hover:scale-105 group-hover:border-amber-300 transition-all duration-300">
+                                    <span class="text-4xl sm:text-5xl select-none" role="img" aria-label="Taiwan Flag">🇹🇼</span>
+                                </div>
+                                <span class="px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide bg-amber-500/15 text-amber-300 border border-amber-400/35">
+                                    LOCAL TRACK
+                                </span>
+                            </div>
+
+                            <!-- 標題與副標題 -->
+                            <div class="mb-4">
+                                <h2 class="text-2xl sm:text-3xl font-black text-white group-hover:text-amber-300 transition-colors">
+                                    台灣籍同仁入口
+                                </h2>
+                                <p class="text-sm sm:text-base font-bold text-amber-400 mt-1">
+                                    Local Staff Portal (繁體中文)
+                                </p>
+                            </div>
+
+                            <!-- 說明文字框 -->
+                            <div class="bg-slate-900/80 border border-slate-800/90 group-hover:border-amber-500/30 rounded-2xl p-4 sm:p-5 mb-7 transition-colors">
+                                <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+                                    員工須知簽署、標準作業流程 (SOP) 與線上業務測驗。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 大尺寸好按的行動按鈕 -->
+                        <div class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 group-hover:from-amber-400 group-hover:to-orange-400 text-slate-950 font-black text-base sm:text-lg flex items-center justify-between shadow-lg shadow-amber-500/25 transition-all duration-300">
+                            <span>進入繁體中文專區</span>
+                            <span class="w-8 h-8 rounded-full bg-slate-950/15 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- ------------------------------------------------------ -->
+                <!-- 右側卡片：外籍同仁專區 (青綠色科技光暈 -> en/home.html)   -->
+                <!-- ------------------------------------------------------ -->
+                <a href="en/home.html"
+                   class="group relative block rounded-3xl p-[2px] bg-gradient-to-br from-teal-400 via-emerald-500 to-cyan-600/80 shadow-xl shadow-teal-950/30 hover:shadow-2xl hover:shadow-teal-500/35 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-teal-400/50">
+                    
+                    <!-- 卡片外部懸停發光層 -->
+                    <div class="absolute -inset-1 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <div class="relative h-full bg-[#0f172a]/95 group-hover:bg-[#10212d] rounded-[22px] p-7 sm:p-9 flex flex-col justify-between transition-colors duration-300 overflow-hidden">
+                        <!-- 內部右上裝飾光球 -->
+                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl group-hover:bg-teal-400/25 transition-all duration-500"></div>
+
+                        <div>
+                            <!-- 圖示與身分標籤列 -->
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20 border border-teal-400/40 flex items-center justify-center shadow-inner group-hover:scale-105 group-hover:border-teal-300 transition-all duration-300">
+                                    <span class="text-4xl sm:text-5xl select-none" role="img" aria-label="Global Icon">🌐</span>
+                                </div>
+                                <span class="px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide bg-teal-500/15 text-teal-300 border border-teal-400/35">
+                                    BILINGUAL TRACK
+                                </span>
+                            </div>
+
+                            <!-- 標題與副標題 -->
+                            <div class="mb-4">
+                                <h2 class="text-2xl sm:text-3xl font-black text-white group-hover:text-teal-300 transition-colors leading-tight">
+                                    International Staff <span class="block sm:inline text-xl sm:text-2xl font-extrabold text-slate-200 group-hover:text-teal-200">/ 外籍同仁入口</span>
+                                </h2>
+                                <p class="text-sm sm:text-base font-bold text-teal-400 mt-1.5">
+                                    Bilingual & Mandarin Training (English / 中文)
+                                </p>
+                            </div>
+
+                            <!-- 說明文字框 -->
+                            <div class="bg-slate-900/80 border border-slate-800/90 group-hover:border-teal-500/30 rounded-2xl p-4 sm:p-5 mb-7 transition-colors">
+                                <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+                                    雙語員工須知簽署、中文口語互動導覽練習與線上測驗。
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1.5">
+                                    Bilingual Rules E-Signature, Mandarin Speaking Drills & Online Quizzes.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 大尺寸好按的行動按鈕 -->
+                        <div class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-teal-400 to-emerald-500 group-hover:from-teal-300 group-hover:to-emerald-400 text-slate-950 font-black text-base sm:text-lg flex items-center justify-between shadow-lg shadow-teal-500/25 transition-all duration-300">
+                            <span>Enter Bilingual Portal</span>
+                            <span class="w-8 h-8 rounded-full bg-slate-950/15 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                                <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- 頁尾版權資訊 (Footer) -->
+    <footer class="relative z-10 w-full border-t border-slate-800/70 py-5 px-4 text-center">
+        <p class="text-xs text-slate-500">
+            &copy; 2026 運動指導科 員工培訓與報到系統 | Sports Instruction Dept. Training & Onboarding Portal.
+        </p>
+    </footer>
+
+</body>
+</html>
